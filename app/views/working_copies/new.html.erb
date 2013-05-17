@@ -1,0 +1,5 @@
+<h1><%= _('New working copy') %></h1>
+
+<%= render 'form' %>
+<br/>
+<%= link_to _('Back'), working_copies_path(:repository_id => @repository.id), :class => 'back mini-icon' %>

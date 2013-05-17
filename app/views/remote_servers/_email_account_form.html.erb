@@ -1,0 +1,49 @@
+<% if flash[:error] %>
+<div class="error"><%= flash[:error] %></div>
+<% end %>
+
+<%
+if params[:action] == "new_email_account" || params[:action] == 'create_email_account'
+  the_action = "create_email_account"
+else
+  the_action = "update_email_account"
+end
+%>
+
+<%= form_tag(the_action, {:autocomplete => 'off'}) do %>
+  <%#= raise the_action %>
+  <%#=raise params.to_yaml%>
+  <div class="field">
+    <%= _('User name') %>:<br />
+    
+    <%= text_field_tag :user, @user_name && params[:action] != 'new_email_account' ? @user_name : '',:required => true, :readonly => (params[:action] == "edit_email_account") %>
+    
+    <%= '@' %>
+    
+    <%=@clean_host%>
+  </div>
+  <% if params[:action] == "edit_email_account"%>
+
+    <div style="color: red;">
+      <%=_('Leave blank to keep unchanged.')%>
+    </div>
+  <%end%>
+  <div class="field">
+    <%= _('Password') %>:<br />
+
+    <%= password_field_tag :password, '',:required => (params[:action] == "new_email_account") %>
+
+  </div>
+  <div class="field">
+    <%= _('Password confirmation') %>:<br />
+    <%= password_field_tag :password_confirmation, '',:required => (params[:action] == "new_email_account") %>
+  </div>
+
+  <%#=  raise 'clean_host'+@clean_host.to_s%>
+  <%= hidden_field_tag :clean_host, @clean_host %>
+<br/>
+  <div class="actions">
+    <%= submit_tag('Save') %>
+  </div>
+<br/>
+<% end %>

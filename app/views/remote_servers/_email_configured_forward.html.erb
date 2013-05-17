@@ -1,0 +1,24 @@
+<h2><%= _('Configured forwarders') %></h2>
+
+
+<%if @account_remote_server.get_count_email_forwarders == 0%>
+  <p><%= _('No emails forwarders configured') %></p>
+<%else%>
+<table class="email_forward_table">
+  <tbody>
+    <%# raise @account_remote_server.list_email_account.to_yaml %>
+    <%# @account_remote_server.list_email_forward['data']['list'].each do |email| %>
+      <% @account_remote_server.get_email_forwarders.each do |email| %>
+      <%if email[1] %>
+        <% email[1].each do |to| %>
+          <%#=  raise to.to_s %>
+          <tr>
+            <td><%=  email[0]+'@'+@clean_host.to_s %> &rarr; <%=  to.to_s%> </td>
+            <td><%= link_to image_tag("destroy.png", :title => _("Delete"), :alt => _("Delete")), {:action => :delete_email_forward, :from => email[0]+'@'+@clean_host.to_s, :to => to.to_s, :account_remote_servers_id => @account_remote_server.id}, :confirm => _('Are you sure?') %></td>
+          </tr>
+        <%end%>
+      <%end%>
+    <%end%>
+  </tbody>
+</table>
+<%end%>

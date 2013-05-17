@@ -1,0 +1,45 @@
+<%= form_for(@remote_server.becomes(RemoteServer)) do |f| %>
+  <% if @remote_server.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@remote_server.errors.count, "error") %> prohibited this remote_server from being saved:</h2>
+
+      <ul>
+      <% @remote_server.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= _('Description') %>:<br />
+    <%= f.text_field :description %>
+  </div>
+  <div class="field">
+    <%= _('Host') %>:<br />
+    <%= f.text_field :host %>
+  </div>
+  <div class="field">
+    <%= _('User') %>:<br />
+    <%= f.text_field :user %>
+  </div>
+  <div class="field">
+    <%= _('Password') %>:<br />
+    <%= f.password_field :password %>
+  </div>
+  <div class="field">
+    <%= _('Path') %>:<br />
+    <%= f.text_field :path %>
+  </div>
+
+  <div class="selector">
+    <%= _('Type') %>:<br />
+    <%= f.select :type, options_for_select(RemoteServer.get_types.invert, :selected => @remote_server.class.name.to_s) %>
+  </div>
+
+<br/>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<br/>
+<% end %>

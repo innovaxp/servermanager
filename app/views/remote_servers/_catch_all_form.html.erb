@@ -1,0 +1,16 @@
+<% if flash[:error] %>
+<div class="error"><%= flash[:error] %></div>
+<% end %>
+
+<%= form_tag('create_catch_all') do %>
+  <%= _('Resend all mail to ')%><span class="bold"><%=  @account_remote_server.host.to_s%></span>
+  <div class="field">
+    <%=  _( ' to ') %>:
+    <%= text_field_tag :email_to, '',{:placeholder => 'user@domain.com, user2@domain2.com...', :type  => :email, :required => true, :class => 'input_catch_all'} %>
+  </div>
+<br/>
+  <div class="actions">
+    <%= submit_tag('Save') %>
+  </div>
+<br/>
+<% end %>

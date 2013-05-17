@@ -1,0 +1,88 @@
+<%  content_for :header do %>
+
+<h1><%= link_to _('Server Manager'), :controller => 'application', :action => 'index' %></h1>
+
+<% end
+
+content_for :nav do %>
+<div style="overflow:auto">
+<div style="float:left">
+	<ul>
+		<% if session[:role] == 'admin' %>
+		<li id="search" class="<%=  @section == 'searchfiles' ? 'menu-for-hover' : '' %>"><%= link_to _('Search on files'),:controller => 'file_search', :action => 'search' %></li>
+		<li id="replace" class="<%=  @section == 'replacefiles' ? 'menu-for-hover' : '' %>"><%= link_to _('Replace on files'),:controller => 'file_search', :action => 'replace' %></li>
+		<% end %>
+		<li id="remoteservers" class="<%=  @section == 'remoteservers' ? 'menu-for-hover' : '' %>"><%= link_to _('Remote servers'), :controller => 'remote_servers', :action => 'index' %></li>
+		<li id="repositories" class="<%=  (@section == 'repositories') ? 'menu-for-hover' : '' %>"><%= link_to _('Repositories'), :controller => 'repositories', :action => 'index' %></li>
+                <li id="backups" class="<%=  @section == 'backups' ? 'menu-for-hover' : '' %>"><%= link_to _('Backups'), backup_configurations_path%></li>
+                <li id="alerts" class="<%=  @section == 'alerts' ? 'menu-for-hover' : '' %>"><%= link_to _('Alerts'), :controller => 'alerts', :action => 'edit' %></li>          
+                <li id="permissions" class="<%=  @section == 'permissions' ? 'menu-for-hover' : '' %>"><%= link_to _('Permissions'), :controller => 'user_permissions', :action => 'index' %></li>
+                
+                <% if session[:role] == 'admin' %>
+                <li id="users" class="<%=  @section == 'users' ? 'menu-for-hover' : '' %>"><%= link_to _('Users'), :controller => 'users', :action => 'index' %></li>
+                <%  end %>
+	</ul>
+</div>
+
+<div style="float:right">
+	<ul>
+	<% if session[:user_id] %>
+		<li><%= link_to _('Logout'), :controller => 'sessions', :action => 'destroy' %></li>
+	<% else %>
+		<li><%= link_to _('Login'), :controller => 'sessions', :action => 'create' %></li>
+	<% end %>
+	</ul>
+</div>
+</div>
+
+
+
+<% end
+
+
+content_for :footer do %>
+
+<div style="float:right; padding: 15px 20px 0 0;"><a href="#header">&uarr; <%= _('Back to top') %></a></div>
+
+<p>&copy; <a href="http://www.innovaxp.com" title="Innova Experience">Innova Experience</a> 2012</p>
+
+
+
+<% end
+
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= _('Server Manager') %></title>
+  <link rel="icon" href="/favicon.png" />
+  <link rel="shortcut icon" href="/favicon.png" />
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+	<div id="loading" style="position:absolute;top:0;left:0;width:100%;height:100%; background: #333; opacity: 0.5; display:none;">
+		<div style="width: 400px; margin: 0 auto;color: #fff;text-align: center;padding-top: 300px;font-size: 26px">
+			<%= image_tag "loading_bar.gif", :width => 128, :height => 15  %><br/>
+			<%= _('Loading') %>
+		</div>
+	</div>
+	<div id="header">
+		<%= yield :header %>
+	</div>
+	<div id="nav">
+		<%= yield :nav %>
+	</div>
+	<div id="wrapper">
+		<div id="content">
+			<%= yield %>
+		</div>
+	</div>
+	<div id="footer">
+		<%= yield :footer %>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+
+<div class="cron_field">
+  
+  <%= text_field_tag @field_name, '',:size => '3', :class => 'input_cron' %>
+  <%= select_tag 'select_'+@field_name,options_for_select(@select_list.invert), :class => 'select_cron' %>
+
+</div>

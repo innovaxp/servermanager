@@ -1,0 +1,24 @@
+<h1>Listing alerts</h1>
+<table>
+  <tr>
+    <th>Owner</th>
+    <th>Additional emails</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @alerts.each do |alert| %>
+  <tr>
+    <td><%= alert.owner_id %></td>
+    <td><%= alert.additional_emails %></td>
+    <td><%= link_to 'Show', alert %></td>
+    <td><%= link_to 'Edit', edit_alert_path(alert) %></td>
+    <td><%= link_to 'Destroy', alert, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Alert', new_alert_path %>

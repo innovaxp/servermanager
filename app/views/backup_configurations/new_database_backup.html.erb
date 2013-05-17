@@ -1,0 +1,7 @@
+<h1><%= _('New database backup') %></h1>
+
+<%=render :partial => 'form'%>
+
+<br/>
+<%#{:action => 'index', :type => 'DataBaseBackupConfiguration' , :remote_server_id => params[:remote_server_id], :controller => 'backup_configurations'}%>
+<%= link_to _('Back'), request.referer, :class => "back mini-icon" %>

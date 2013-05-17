@@ -1,0 +1,146 @@
+#!/bin/bash
+
+#Parse the command line arguments
+# A POSIX variable
+OPTIND=1         # Reset in case getopts has been used previously in the shell.
+
+# Set the default type
+USERNAME=''
+PASSWORD=''
+DOMAINNAME=''
+TYPE='php'
+
+while getopts ":u:p:d:t:" opt; do
+    case "$opt" in
+    u)  USERNAME=$OPTARG
+        ;;
+    p)  PASSWORD=$OPTARG
+        ;;
+    d)  DOMAINNAME=$OPTARG
+        ;;
+	t)  TYPE=$OPTARG
+		;;
+    esac
+done
+
+if [ -z $USERNAME ] || [ -z $PASSWORD ] || [ -z $DOMAINNAME ];
+then
+	echo "Too few arguments, usage inn_ec2_create_account -u <username> -p <password> -d domainname.tld [-t (php|rails)]"
+	exit -1
+fi
+
+# Check if the user is already created
+if [ -d "/home/$USERNAME" ]; then 
+	echo "User $USERNAME already exists"
+	exit -2
+fi
+
+# Check if the domain is already reserved
+if [ -f "/etc/bind/zones/$DOMAINNAME.db" ]; then
+	echo "Domain $DOMAINNAME already in use"
+	exit -3
+fi
+
+shift $((OPTIND-1))
+
+[ "$1" = "--" ] && shift
+
+##########
+# Create the user
+##########
+# Users in group "daemon" are sudoers
+adduser --ingroup daemon --disabled-password --gecos "" ${USERNAME}
+echo "${USERNAME}:${PASSWORD}" | chpasswd
+
+# Allow ssh/ftp access
+usermod -a -G sshusers ${USERNAME}
+
+service ssh restart
+
+# Add some paths and bitnami initialization on bash login
+echo '
+PATH="/opt/bitnami/memcached/bin:/opt/bitnami/perl/bin:/opt/bitnami/git/bin:/opt/bitnami/nginx/sbin:/opt/bitnami/sphinx/bin:/opt/bitnami/sqlite/bin:/opt/bitnami/varnish/bin:/opt/bitnami/php/bin:/opt/bitnami/mysql/bin:/opt/bitnami/apache2/bin:/opt/bitnami/subversion/bin:/opt/bitnami/ruby/bin:/opt/bitnami/common/bin:$PATH"
+export PATH
+if [[ -s /opt/bitnami/.bitnamirc ]]; then
+  source /opt/bitnami/.bitnamirc
+fi
+
+export RAILS_ENV=production
+
+' >> /home/${USERNAME}/.bashrc
+
+mkdir /home/${USERNAME}/public_html
+mkdir /home/${USERNAME}/rails_apps
+chown -R ${USERNAME}:daemon /home/${USERNAME}/
+
+# Create the MySQL user
+ROOTPASS='THEROOTPASSWORD'
+
+mysql --user=root --password="${ROOTPASS}" -h localhost --execute="CREATE USER '${USERNAME}'@'localhost' IDENTIFIED BY '${PASSWORD}'"
+# Assign only namespaced DB creation (account_XXXXX)
+mysql --user=root --password="${ROOTPASS}" -h localhost --execute="GRANT ALL PRIVILEGES ON \`${USERNAME}_%\`.* TO '${USERNAME}'@'localhost'"
+
+echo "
+<VirtualHost *:80>
+        ServerAdmin info@${DOMAINNAME}
+        ServerName ${DOMAINNAME}
+        ServerAlias www.${DOMAINNAME}
+        # Indexes + Directory Root.
+        DirectoryIndex index.html index.php" >> /opt/bitnami/apache2/conf/extra/httpd-vhosts.conf
+		
+if [ ${TYPE} = 'rails' -o ${TYPE} = 'RAILS' -o ${TYPE} = 'ror' -o ${TYPE} = 'ROR' ]
+then	
+	echo "DocumentRoot /home/${USERNAME}/rails_apps/${USERNAME}/public" >> /opt/bitnami/apache2/conf/extra/httpd-vhosts.conf
+elif [ ${TYPE} = 'php' -o ${TYPE} = 'PHP' ]
+then
+	echo "DocumentRoot /home/${USERNAME}/public_html" >> /opt/bitnami/apache2/conf/extra/httpd-vhosts.conf
+else
+	echo "DocumentRoot /home/${USERNAME}/public_html" >> /opt/bitnami/apache2/conf/extra/httpd-vhosts.conf
+fi
+
+echo "
+        # Logfiles
+        #ErrorLog /home/${USERNAME}/logs/error.log
+        #CustomLog /home/${USERNAME}/logs/access.log combined
+</VirtualHost>
+" >> /opt/bitnami/apache2/conf/extra/httpd-vhosts.conf
+
+
+# Create the DNS zone and records
+NS1="ns31.extreme-marketing.com"
+NS2="ns32.extreme-marketing.com"
+SRV_IP="54.246.82.69"
+
+echo "${DOMAINNAME}. 86400   IN      SOA     ${NS1}. ${NS2}. (
+                6 ; Serial
+                28800 ; Refresh
+                3600 ; Retry
+                604800 ; Expire
+                38400 ; Default TTL
+)
+
+${DOMAINNAME}. 86400   IN      NS      ${NS1}.
+${DOMAINNAME}. 86400   IN      NS      ${NS2}.
+${DOMAINNAME}. 14400   IN      A       ${SRV_IP}
+localhost      14400   IN      A       127.0.0.1
+${DOMAINNAME}. 14400   IN      MX      0       all.${DOMAINNAME}.
+
+mail    14400   IN      CNAME   ${DOMAINNAME}.
+www     14400   IN      A       ${SRV_IP}
+all     14400   IN      A       ${SRV_IP}
+mta     14400   IN      A       ${SRV_IP}
+" > /etc/bind/zones/${DOMAINNAME}.db
+
+echo "zone \"${DOMAINNAME}\" {
+    type master;
+    file \"/etc/bind/zones/${DOMAINNAME}.db\";
+};
+" >> /etc/bind/named.conf.local
+
+# Restart the DNS service
+service bind9 restart
+
+# Restart apache
+/opt/bitnami/ctlscript.sh restart apache
+
+exit 0

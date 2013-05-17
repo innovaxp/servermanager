@@ -1,0 +1,6 @@
+<%= render :partial => 'dns_list' %>
+
+<%= link_to _('Back'), remote_servers_path+'?open_account='+@remote_server.root_remote_server_id.to_s, :class => "back mini-icon" %>
+
+
+<span style="margin-left: 75px;"><%= link_to _('New DNS'), {:action => 'new_dns'}, :class => "new mini-icon" %></span>

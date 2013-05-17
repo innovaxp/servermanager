@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b><%=_("Backup configuration")%>:</b>
+  <%= link_to(@backup.backup_configuration.id,@backup.backup_configuration) %>
+</p>
+
+<p>
+  <b><%= _("Status")%>:</b>
+  <%= @backup.status %>
+</p>
+
+<p>
+  <b><%= _("Meta") %>:</b>
+  <%= @backup.meta %>
+</p>
+
+<%= link_to _('Back'), {:action =>'index', :backup_configuration_id => @backup.backup_configuration.id }, :class => 'back mini-icon' %>

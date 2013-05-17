@@ -1,0 +1,14 @@
+<table class="accounts_manage index-table catch_all_table">
+
+  <tbody>
+
+      <%#= raise  @account_remote_server.to_yaml%>
+      <% @account_remote_server.gets_catch_all.each do |catch| %>
+        <tr>
+          <td><%=  catch.to_s %></td>
+          <%#= raise  catch.to_s%>
+          <td><%= link_to image_tag("destroy.png", :title => _("Delete"), :alt => _("Delete")), {:action => 'delete_catch_all', :to => catch.to_s, :account_remote_servers_id => @account_remote_server.id.to_s}, :confirm => _('Are you sure?') %></td>
+        </tr>
+    <%end%>
+  </tbody>
+</table>

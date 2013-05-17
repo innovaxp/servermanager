@@ -1,0 +1,31 @@
+<h1><%= _('Edit permissions_on_repository')%></h1>
+
+<%= form_tag(:action => 'update_permissions_on_repository', :method => 'post') do%>
+
+	<table class="index-table">
+		<thead>
+			<tr>
+				<th><%= _('user') %></th>
+				<th><%= _('Read permission') %></th>
+				<th><%= _('Write permission') %></th>
+			</tr>
+		</thead>
+		<% @users.each do |user|%>
+		<tr>
+			<td><%= user.name %></td>
+			<td><%= check_box_tag 'permission['+user.id.to_s+'][read]', '1', user.has_permision?(@repository.id, 'read') %></td>
+			<td><%= check_box_tag 'permission['+user.id.to_s+'][write]', '1', user.has_permision?(@repository.id, 'write') %></td>
+		</tr>
+		<% end %>
+                
+	</table>
+
+	<br/>
+	<div class="actions">
+    	<%= submit_tag ('save') %>
+  	</div>
+	<br/>
+	<%= link_to _('Back'), user_permissions_path, :class => 'back mini-icon' %>
+  </div>
+
+<% end %>

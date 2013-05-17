@@ -1,0 +1,114 @@
+<h1><%= @title  %></h1>
+
+<% if notice && notice != '' %>
+	<p class="notice"><%= notice %>.</p>
+<% end %>
+
+<table class="index-table">
+  <thead>
+  <tr>
+    <th><%= _("Remote server data")  %></th>
+    <!--<th><%= _("DB name")  %></th>-->
+    <!--<th><%= _("Local folder url")  %></th>-->
+    <th><%= _("Folder")  %></th>
+    <th><%= _("Upload service")  %></th>
+    <th><%= _("Period")  %></th>
+    <th><%= _("Notify")  %></th>
+    <th><%= _("Active")  %></th>
+    <th><%= _("Last Suscesfully Backup")  %></th>
+    <th class="options_backups"></th>
+  </tr>
+</thead>
+<tbody>
+<% @backup_configurations.each do |backup_configuration| %>
+  <%#= raise backup_configuration.to_yaml %>
+  <tr id="<%= backup_configuration.id %>">
+    <td><span <% if @remote_server %>style="display: none;" <% end %> ><b><%= _('Remote server') %></b>: <%= backup_configuration.remote_server.description %><br/></span>
+		<b><%= _('Databases') %></b>: <%= backup_configuration.databases ? backup_configuration.databases.join(', ') : '' %><br/>
+		<b><%= _('Location') %></b>: <%= link_to(backup_configuration.local_folder_url.to_s,backup_configuration.local_folder_url.to_s) %></td>
+    <td><%=backup_configuration.folder.to_s%></td>
+    <td><%= backup_configuration.upload_service ? link_to(backup_configuration.upload_service.nice_name,backup_configuration.upload_service) : 'Not Defined' %></td>
+        <% if backup_configuration.period_unit.to_s == 'd'
+              number_unit = sprintf(n_("%d day", "%d days", backup_configuration.period_number), backup_configuration.period_number)
+        elsif backup_configuration.period_unit.to_s == 'w'
+              number_unit = sprintf(n_("%d week", "%d weeks", backup_configuration.period_number), backup_configuration.period_number)
+        elsif backup_configuration.period_unit.to_s == 'm'
+               number_unit = sprintf(n_("%d month", "%d months", backup_configuration.period_number), backup_configuration.period_number)
+        else
+              number_unit = sprintf(n_("%d year", "%d years", backup_configuration.period_number), backup_configuration.period_number)
+        end
+    %>
+    <td><%= number_unit %></td>
+    <td><% if backup_configuration.notify_to && backup_configuration.notify_to != nil %>
+      <abbr title='<%=backup_configuration.notify_to_cs%>'>YES</abbr>
+      <%else%>
+        NO
+      <%end%>
+        </td>
+   <% if backup_configuration.active?
+        act_image = "active.png"
+        alt_txt = _("Active")
+      else
+        act_image = "inactive.png"
+        alt_txt = _("Inactive")
+      end
+      %>
+
+      <%
+        if backup_configuration.type == 'FileBackupConfiguration'
+          the_action = 'toggle_file_backup_activation'
+        else
+          the_action = 'toggle_database_backup_activation'
+        end
+      %>
+
+      <td class="cent-cell"><%= link_to image_tag(act_image, :alt => alt_txt, :title => alt_txt, :class => "mini-image"),{:action => the_action, :remote_server_id => backup_configuration.id.to_s}%></td>
+   <td><span style="font-size: small"><%=  backup_configuration.last_successfully_backup ? (l backup_configuration.last_successfully_backup.created_at, :format => :custom ) : ''%></span><br/>
+       <%= link_to(_('Run Backup Now'),{:controller => 'backup_configurations',:action=>'run_backup',:id=>backup_configuration.id}) %>
+   </td>
+   <td>
+   <%
+   #raise @type.to_s
+    if @type == 'FileBackupConfiguration'
+      #raise backup_configuration.id
+      edit_link = url_for :action => 'edit_file_backup', :id => backup_configuration.id, :remote_server_id => @remote_server.id
+    else
+      #raise 'tipo data base'
+      edit_link = url_for :action => 'edit_database_backup',:id => backup_configuration.id, :remote_server_id => @remote_server.id
+    end
+    %>
+   <%= link_to (image_tag "db_migrate.png",:title=>_('Backups'),:alt=>_('Backups')), {:action =>'index', :controller =>'backups', :backup_configuration_id =>backup_configuration.id} %>
+   <%= link_to (image_tag "edit.png",:title=>_('Edit'),:alt=>_('Edit')), edit_link %>
+   <%= link_to image_tag("destroy.png", :title => _("Delete"), :alt => _("Delete")), backup_configuration_path(backup_configuration), :confirm => _('Are you sure?'), :method => :delete, :id => backup_configuration.id %>
+    </td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<% if @remote_server
+  if @type == 'FileBackupConfiguration'
+    new_link = url_for :action => 'new_file_backup', :remote_server_id => @remote_server.id
+  else
+    new_link = url_for :action => 'new_database_backup', :remote_server_id => @remote_server.id
+  end
+else
+  new_link = new_backup_configuration_path
+end %>
+
+<%#= raise @type %>
+<%if @type == 'FileBackupConfiguration'
+  text = _('New File Backup configuration')
+else
+  text = _('New Data Base Backup configuration')
+end
+
+%>
+
+<%= link_to text.to_s, new_link ,:class => 'new mini-icon' %>
+
+<%= link_to _('Upload Services'), upload_services_path ,:class => 'upload mini-icon' %>
+<%#= raise @remote_server.to_yaml %>
+<%= link_to _('Back'), remote_servers_path+'?open_account='+@remote_server.root_remote_server_id.to_s,:class => 'back mini-icon' %>

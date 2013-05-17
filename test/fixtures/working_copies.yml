@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  repository_id: 1
+  location: MyString
+  user: MyString
+  password: MyString
+  status: MyString
+  current_revision: MyString
+
+two:
+  repository_id: 1
+  location: MyString
+  user: MyString
+  password: MyString
+  status: MyString
+  current_revision: MyString

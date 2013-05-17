@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Description:</b>
+  <%= @repository.description %>
+</p>
+
+<p>
+  <b>Master location:</b>
+  <%= @repository.master_location %>
+</p>
+
+<p>
+  <b>Slave location:</b>
+  <%= @repository.slave_location %>
+</p>
+
+<p>
+  <b>Current version:</b>
+  <%= @repository.current_version %>
+</p>
+
+
+
+<%= link_to _('Edit'), edit_repository_path(@repository), :class => 'edit mini-icon' %> |
+<%= link_to _('Back'), repositories_path, :class => 'back mini-icon' %>

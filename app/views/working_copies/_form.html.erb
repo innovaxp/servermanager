@@ -1,0 +1,43 @@
+<%= form_for(@working_copy, :as => 'working_copy') do |f| %>
+	<% if @working_copy.errors.any? %>
+		<div id="error_explanation">
+			<h2><%= pluralize(@working_copy.errors.count, "error") %> prohibited this working_copy from being saved:</h2>
+
+			<ul>
+				<% @working_copy.errors.full_messages.each do |msg| %>
+					<li><%= msg %></li>
+				<% end %>
+			</ul>
+		</div>
+	<% end %>
+
+	<%= f.hidden_field :repository_id %>
+   <% if !@editing || @editing == false %>
+	<div class="field">
+		<%= _('Repository type') %>:<br/><%= collection_select :working_copy, :type, @types, :first, :last %>
+	</div>
+
+	<div class="field">
+		<%= _('Remote server') %>:<br/><%= f.collection_select :remote_server_id, RemoteServer.find_all_by_owner_id(session[:owner_id]), :id, :pretty_description %>
+	</div>
+
+	<div class="field">
+		<%= _('Working copy sub-folder') %>:<br/><%= f.text_field :wc_location %>
+	</div>
+
+	<div class="field">
+		<%= _('Repository sub-folder') %>:<br/><%= f.text_field :location %>
+	</div>
+  <%  end %>
+        <div>
+              <%= _('Working copy type') %>:<br/>
+                <%= f.radio_button :wc_type, "test" %><%=_('Test')%><br/>
+                <%= f.radio_button :wc_type, "production" %><%=_('Production')%>
+        </div>
+
+	<br/>
+	<div class="actions">
+		<%= f.submit %>
+	</div>
+
+<% end %>

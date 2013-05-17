@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  email: MyString
+  hashed_password: MyString
+  salt: MyString
+  name: MyString
+  f_name: MyString
+  l_name: MyString
+  active: false
+
+two:
+  email: MyString
+  hashed_password: MyString
+  salt: MyString
+  name: MyString
+  f_name: MyString
+  l_name: MyString
+  active: false

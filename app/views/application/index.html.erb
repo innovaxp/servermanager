@@ -1,0 +1,10 @@
+<h1><%= sprintf(_("Welcome to %s"), "Server Manager") %></h1>
+
+<%  if !session[:user_id] %>
+<%= render :template => 'sessions/new' %>
+
+<% else %>
+
+<%= render "welcome_icons" %>
+
+<%  end %>

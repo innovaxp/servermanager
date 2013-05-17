@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b><%= _('Repository') %>:</b>
+  <%= @working_copy.repository_id %>
+</p>
+
+<p>
+  <b><%= _('Location') %>:</b>
+  <%= @working_copy.location %>
+</p>
+
+<p>
+  <b><%= _('User') %>:</b>
+  <%= @working_copy.user %>
+</p>
+
+<p>
+  <b><%= _('Password') %>:</b>
+  <%= @working_copy.password %>
+</p>
+
+<p>
+  <b><%= _('Status') %>:</b>
+  <%= @working_copy.status %>
+</p>
+
+<p>
+  <b><%= _('Current Revision') %>:</b>
+  <%= @working_copy.current_revision %>
+</p>
+
+
+<%= link_to _('Edit'), edit_working_copy_path(@working_copy), :class => 'edit mini-icon' %> |
+<%= link_to _('Back'), working_copies_path, :class => 'back mini-icon' %>

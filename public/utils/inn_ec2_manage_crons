@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Manage cron jobs
+
+if [ $# = 0 ] ;
+then
+	echo "Invalid arguments: usage $0 [list|create|remove|edit|enable|disable] 'planning command'"
+	exit -1
+fi
+
+case "$1" in
+list)
+	IFS=$'\r\n'
+	raw_list=`crontab -l | egrep -v '^# '`
+	echo "{\"data\": [";
+	iterations=`echo "$raw_list" | wc -l`
+	count=0
+	for i in $raw_list; do
+		date_fields=`echo "$i" | cut -d' ' -f1-5`
+		command_field=`echo "$i" | cut -d' ' -f6-`
+		
+		command_field=`echo $command_field | `
+		
+		if [ $count = $iterations-1 ]; then
+			echo "{\"date_fields\": \"$date_fields\", \"command_field\": \"$command_field\"}"
+		else
+			echo "{\"date_fields\": \"$date_fields\", \"command_field\": \"$command_field\"},"
+		fi
+		$count=$count+1
+	done
+	echo "]
+}"
+	
+    ;;
+create)  
+	mkdir -p ~/tmp
+	#write out current crontab
+	crontab -l > ~/tmp/mycron
+	#echo new cron into cron file
+	echo "$2" >> ~/tmp/mycron
+	#install new cron file
+	crontab ~/tmp/mycron
+	rm ~/tmp/mycron
+    ;;
+remove)  
+	# TODO
+    ;;
+edit)
+	# TODO
+	;;
+enable)
+	# TODO
+	;;
+disable)
+	# TODO
+	;;
+esac

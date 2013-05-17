@@ -1,0 +1,421 @@
+<% if(@repository && !@repository.nil?) %>
+<h1><%= sprintf(_('Listing working copies for %s'), @repository.description) %></h1>
+<% elsif(@remote_server && !@remote_server.nil?)  %>
+<h1><%= sprintf(_('Listing working copies for %s Remote Server'), @remote_server.description) %></h1>
+<%end%>
+
+
+<% if (@notice && @notice != '') || (flash[:notice] && flash[:notice]!='') %>
+<p class="notice"><%= @notice ? @notice : flash[:notice] %>. <% if @output && @output != '' %><a href="#" title="<%= _('Show details') %>" class="show-details"><%= _('Show details') %> &darr;</a><% end %></p>
+<% end %>
+
+<% if (flash[:error_message] && flash[:error_message]!='') %>
+<p class="error"><%= flash[:error_message] %>. <% if flash[:object_id] %><%= link_to(_('Edit server data'), edit_remote_server_path(flash[:object_id])) %><% end %></p>
+<% end %>
+
+<% if @output && @output != '' %>
+	<p class="notice output" style="display:none"><%= @output %></p>
+<% end %>
+        
+       
+
+<table class="index-table">
+	<thead>
+		<tr>
+                  <th></th>
+		<th colspan="2"><%= _('Location') %></th>
+		<th><%= _('Status') %></th>
+		<th><abbr title="<%= _('Current Revision') %>">R</abbr></th>
+		<th><%= _('Last update date') %></th>
+		<th style="width: 180px"><%= _('SVN Actions') %> <abbr title="<%= _('Action that appear in red must be performed, green ones not. Grey reflects undefined or unknown status.') %>">?</abbr></th>
+		<th></th>
+                <th></th>
+		</tr>
+	</thead>
+	<tbody>
+<% @working_copies.each do |working_copy| %>
+   <%#@work_cp_repo_id = working_copy.repository_id%>
+  <% if working_copy.lock %>
+  <tr style="background-color:#E3F2E1">
+    <%else%>
+  <tr>
+    <%end%>
+    <%if working_copy.wc_type=='test'%>
+      <td class="cent-cell" style="background-color:#F2F05F;font-weight: bold;">
+        T<br/>
+        E<br/>
+        S<br/>
+        T<br/>
+
+      </td>
+    <%else%>
+      <td class="cent-cell" style="background-color:#F25F5F;font-weight: bold;color:white">
+        P<br/>
+        R<br/>
+        O<br/>
+        D<br/>
+
+      </td>
+    <%end%>
+    <td class="cent-cell" style="border-right: transparent 1px solid;padding:4px 0 0 4px;margin:0;">
+      
+      <%= image_tag working_copy.type.gsub("WorkingCopy","").downcase+".png", :title => working_copy.type.gsub("WorkingCopy",""), :width => 24, :height => 24 %>
+    </td>
+    <td><%= working_copy.remote_server_description ? working_copy.remote_server_description : '' %></td>
+    <td class="cent-cell <%= working_copy.status.to_s %>"><%= working_copy.status ? working_copy.status.humanize : '---' %></td>
+    <td class="cent-cell" style="min-width:50px"><%=  working_copy.current_revision ? working_copy.current_revision.to_i : '' %> / <%= working_copy.repository.current_version ?  working_copy.repository.current_version.to_i : '' %></td>
+    <td class="cent-cell"><%= working_copy.last_update_date ? working_copy.last_update_date.strftime("%d-%m-%Y %H:%M:%S") : _('Unknown') %></td>
+    <td class="cent-cell" style="padding:10px 0 0;margin:0;">
+    
+                <% if working_copy.lock %>
+		<div class="unclickable inline">
+                  <%else%>
+                  <div class="clickable inline">
+                 <%end%>
+                    
+			<% if working_copy.current_revision.to_i == 0 %><%=  link_to 'co', {:controller => "working_copies", :action => 'checkout', :id => working_copy.id, :from => params[:remote_server_id] ? 'server' : 'repo'} , :title => _('Checkout'), :class => 'checkout mini-icon long_task'  %>&nbsp;<% end %>
+			<%=  link_to 'up', {:controller => "working_copies", :action => 'update_wc', :id => working_copy.id, :from => params[:remote_server_id] ? 'server' : 'repo'} , :title => _('Update'), :class => 'update mini-icon long_task'  %>&nbsp;
+			<%=  link_to 'st', {:controller => "working_copies", :action => 'check_status', :id => working_copy.id, :from => params[:remote_server_id] ? 'server' : 'repo'} , :title => _('Check Status'), :class => 'check-status mini-icon long_task'  %>&nbsp;
+			<%=  link_to 'rb', {:controller => "working_copies", :action => 'rollback_wc', :id => working_copy.id, :from => params[:remote_server_id] ? 'server' : 'repo'} , :title => _('Rollback'), :class => 'rollback mini-icon long_task'  %>
+			<br/>
+			<%=  link_to 'ur', {:controller => "working_copies", :action => 'update_to_r', :id => working_copy.id, :from => params[:remote_server_id] ? 'server' : 'repo'} , :title => _('Update to specific revision'), :class => 'history mini-icon long_task'  %>&nbsp;
+                        <%if working_copy.type == 'RailsWorkingCopy'%>
+                          <%=  link_to 'log', {:controller => "working_copies", :action => 'view_log', :working_copy_id => working_copy.id} , :title => _('Log'), :class => "fancyclass log mini-icon long_task"  %>&nbsp;
+                        <%end%>
+                  </div>
+                        &nbsp;<%  if working_copy.lock %><%= link_to '', '#' , {:id => 'lock_'+working_copy.id.to_s , :title=> _('Unlock'), :class => 'button_lock mini-icon long_task'} %> <% else %> <%= link_to '', '#' , {:id => 'unlock_'+working_copy.id.to_s , :title=> _('Lock'), :class => 'button_unlock mini-icon long_task'} %><%  end  %>
+		
+		<div>
+                  <% if !working_copy.lock %>
+			<% if working_copy.kind_of? RailsWorkingCopy %>
+				<p class="specific-actions"><%= _('Rails Actions') %></p>
+                            
+				<%=  link_to _('All tasks'), {:controller => "rails_working_copies", :action => 'all_tasks', :id => working_copy.id} , :title => _('All tasks'), :class => 'all mini-icon long_task confirm'  %>
+				
+                                <br/>
+				<br/>
+				<table class="inner-table" style="text-align:left;border-collapse: collapse;width:100%">
+					<tr>
+						<td class="<%= working_copy.class_for_flag("assets") %>"></td>
+						<td><%=  link_to _('Precompile assets'), {:controller => "rails_working_copies", :action => 'precompile_as', :id => working_copy.id} , :title => _('Precompile assets'), :class => 'assets mini-icon long_task confirm'  %></td>
+					</tr>
+					<tr>
+						<td class="<%= working_copy.class_for_flag("migrate") %>"></td>
+						<td><%=  link_to _('DB Migrations'), {:controller => "rails_working_copies", :action => 'db_migrate', :id => working_copy.id} , :title => _('DB Migrations'), :class => 'db_migrate mini-icon long_task confirm'  %></td>
+					</tr>
+					<tr>
+						<td class="<%= working_copy.class_for_flag("bundle") %>"></td>
+						<td><%=  link_to _('Bundle install'), {:controller => "rails_working_copies", :action => 'bundle_install', :id => working_copy.id} , :title => _('Bundle install'), :class => 'bundle_install mini-icon long_task confirm'  %></td>
+					</tr>
+					<tr>
+						<td class="<%= working_copy.class_for_flag("restart") %>"></td>
+						<td><%=  link_to _('Server Restart'), {:controller => "rails_working_copies", :action => 'serv_restart', :id => working_copy.id} , :title => _('Server Restart'), :class => 'serv_restart mini-icon long_task confirm'  %></td>
+					</tr>
+				</table>
+				
+			<% elsif working_copy.kind_of? PhpWorkingCopy %>
+				<p class="specific-actions"><%= _('PHP Actions') %></p>
+				<p style="margin-top:0"><%=  link_to _('Server Restart'), {:controller => "php_working_copies", :action => 'serv_restart', :id => working_copy.id} , :title => _('Server Restart'), :class => 'serv_restart mini-icon long_task confirm'  %></p>
+				
+			<% end %>
+                    <%end%>
+		</div>
+	</td>
+         <td class="cent-cell">
+            <%= link_to image_tag("edit.png", :border=>0, :title => _("Edit"), :alt => _("Edit")), edit_working_copy_path(working_copy) %>
+	</td>
+        <td class="cent-cell">
+            <%= link_to '', working_copy, method: :delete, confirm: _('Are you sure? This action cannot be undone'), :title => _('Destroy'), :class => 'destroy mini-icon' %>
+	</td>
+   
+  </tr>
+<% end %>
+	</tbody>
+</table>
+
+<br /><%# raise @repository.id.to_s %>
+<%if(@remote_server && !@remote_server.nil?)%>
+  <%= link_to _('Back to remote servers'), remote_servers_path, :class => 'back mini-icon' %>
+<%else%>
+  <%= link_to _('Back to repositories'), repositories_path, :class => 'back mini-icon' %>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<%= link_to _('New working copy'), new_working_copy_path(:repository_id => params[:repository_id] ? params[:repository_id] : @working_copy.repository.id), :class => 'new mini-icon' %>
+<%end%>
+
+<script type="text/javascript">
+
+        function mycallbackform(e,pass1,m,f){
+              
+              if(pass1 == true){
+
+                var pass = Base64.encode(f.password);
+                if(pass && pass != ''){
+                  jQuery.ajax({
+                    type: "POST",
+                    url:"<%= url_for(:controller=>'working_copies',:action=>"wc_change_lock_status")%>",
+                    data:"password="+pass+"&working_copy_id="+f.wc_id,
+                    dataType: 'json',
+                    async: true,
+                    complete: function(data,textStatus,jqXHR){
+                      dataJ = eval('('+data.responseText+')');
+                      if(dataJ.message && dataJ.message != ''){
+
+                        alert(dataJ.message)
+
+                      }
+                      else{
+                        window.location.reload();
+                      }
+                    }
+                  });
+                }
+
+                }
+              
+            }
+
+
+	jQuery(document).ready(function(){
+		jQuery('#loading').hide();
+
+		jQuery('.clickable a.long_task').click(function(){
+			jQuery('#loading').show();
+		});
+
+		jQuery('.confirm').click(function(){
+			if(confirm('<%= _('Are you sure?') %>')){
+				return true;
+			}
+			else{
+				jQuery('#loading').hide();
+				return false;
+			}
+		});
+
+		jQuery('.show-details').click(function(){
+			jQuery('.output').toggle("slow");
+		})
+	});
+
+
+          jQuery('.button_lock').live('click', function(){
+            var aux = jQuery(this);
+            var wc_id= aux.attr('id');
+            wc_id_array=wc_id.split("_");
+            wc_id=wc_id_array[1];
+
+            var txt = "<%=_('Please insert your password')%>:<br /> <input type='password' id='password' name='password' value='' /><input type='hidden' id='wc_id' name='wc_id' value='"+ wc_id +"' />";
+            jQuery.prompt(txt,{
+              callback: mycallbackform,
+              buttons: { <%= _('Accept')  %>: true, <%= _('Cancel')  %>: false },
+               prefix:'jqismooth'
+              
+            });
+
+           return false;
+          });
+
+            
+           
+
+
+        jQuery('.button_unlock').live('click', function(){
+                   var aux = jQuery(this);
+                   var wc_id= aux.attr('id');
+                   wc_id_array=wc_id.split("_");
+                   wc_id=wc_id_array[1];
+                   
+
+                   var ok_response = confirm("<%= _('Are you sure?') %>");
+                   if (ok_response){
+                     jQuery.ajax({
+                          type: "POST",
+                          url:"<%= url_for(:controller=>'working_copies',:action=>"wc_change_lock_status")%>",
+                          data:"working_copy_id="+wc_id,
+                          dataType: 'json',
+                           async: true,
+                          complete: function(data,textStatus,jqXHR){
+                            if(data.message && data.message != ''){
+
+                              alert(data.message)
+
+                            }
+                            else{
+                              window.location.reload();
+                              
+                            }
+                          }
+                      });
+                    }
+                    
+        });
+
+        jQuery('.unclickable a').click( function(a) {
+          jQuery('#loading').hide();
+          a.preventDefault();
+          a.stopPropagation();
+          alert("<%= _('This working copy is locked. You must unlock it in order to proceed with operations.')%>");
+          return false;
+          
+        });
+
+
+        jQuery(document).ready( function() {
+          
+          jQuery(".fancyclass").fancybox({
+            onClosed: function(){
+              jQuery('#loading').hide();
+            }
+          });
+
+        });
+
+
+
+
+
+
+/**
+*
+*  Base64 encode / decode
+*  http://www.webtoolkit.info/
+*
+**/
+
+var Base64 = {
+
+	// private property
+	_keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+
+	// public method for encoding
+	encode : function (input) {
+		var output = "";
+		var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+		var i = 0;
+
+		input = Base64._utf8_encode(input);
+
+		while (i < input.length) {
+
+			chr1 = input.charCodeAt(i++);
+			chr2 = input.charCodeAt(i++);
+			chr3 = input.charCodeAt(i++);
+
+			enc1 = chr1 >> 2;
+			enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+			enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+			enc4 = chr3 & 63;
+
+			if (isNaN(chr2)) {
+				enc3 = enc4 = 64;
+			} else if (isNaN(chr3)) {
+				enc4 = 64;
+			}
+
+			output = output +
+			this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
+			this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+
+		}
+
+		return output;
+	},
+
+	// public method for decoding
+	decode : function (input) {
+		var output = "";
+		var chr1, chr2, chr3;
+		var enc1, enc2, enc3, enc4;
+		var i = 0;
+
+		input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+		while (i < input.length) {
+
+			enc1 = this._keyStr.indexOf(input.charAt(i++));
+			enc2 = this._keyStr.indexOf(input.charAt(i++));
+			enc3 = this._keyStr.indexOf(input.charAt(i++));
+			enc4 = this._keyStr.indexOf(input.charAt(i++));
+
+			chr1 = (enc1 << 2) | (enc2 >> 4);
+			chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+			chr3 = ((enc3 & 3) << 6) | enc4;
+
+			output = output + String.fromCharCode(chr1);
+
+			if (enc3 != 64) {
+				output = output + String.fromCharCode(chr2);
+			}
+			if (enc4 != 64) {
+				output = output + String.fromCharCode(chr3);
+			}
+
+		}
+
+		output = Base64._utf8_decode(output);
+
+		return output;
+
+	},
+
+	// private method for UTF-8 encoding
+	_utf8_encode : function (string) {
+		string = string.replace(/\r\n/g,"\n");
+		var utftext = "";
+
+		for (var n = 0; n < string.length; n++) {
+
+			var c = string.charCodeAt(n);
+
+			if (c < 128) {
+				utftext += String.fromCharCode(c);
+			}
+			else if((c > 127) && (c < 2048)) {
+				utftext += String.fromCharCode((c >> 6) | 192);
+				utftext += String.fromCharCode((c & 63) | 128);
+			}
+			else {
+				utftext += String.fromCharCode((c >> 12) | 224);
+				utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+				utftext += String.fromCharCode((c & 63) | 128);
+			}
+
+		}
+
+		return utftext;
+	},
+
+	// private method for UTF-8 decoding
+	_utf8_decode : function (utftext) {
+		var string = "";
+		var i = 0;
+		var c = c1 = c2 = 0;
+
+		while ( i < utftext.length ) {
+
+			c = utftext.charCodeAt(i);
+
+			if (c < 128) {
+				string += String.fromCharCode(c);
+				i++;
+			}
+			else if((c > 191) && (c < 224)) {
+				c2 = utftext.charCodeAt(i+1);
+				string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+				i += 2;
+			}
+			else {
+				c2 = utftext.charCodeAt(i+1);
+				c3 = utftext.charCodeAt(i+2);
+				string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+				i += 3;
+			}
+
+		}
+
+		return string;
+	}
+
+}
+
+ 
+
+</script>

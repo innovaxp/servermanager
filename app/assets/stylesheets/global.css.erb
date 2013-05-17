@@ -1,0 +1,547 @@
+body{
+	margin:0;
+	padding:0;
+	font-family: Helvetica, "Trebuchet MS", Arial, sans-serif;
+	font-size: 16px;
+}
+
+#header{
+	padding:2px 20px;
+	/*background: #33578c url(<%= asset_path "backgnd.png" %>) no-repeat right top;*/
+	background: #33578c url(<%= asset_path "blueprint.jpg" %>) repeat right top;
+}
+
+#header h1{
+	margin: 0;
+	padding: 26px 85px;
+	font-variant: small-caps;
+	background: transparent url(<%= asset_path "terminal.png" %>) no-repeat 12px 15px;
+	color: #f2f2f2;
+	font-weight: lighter;
+	letter-spacing: 2px;
+	
+	font-size: 30px;
+}
+
+#nav{
+	height: 40px;
+	background: #33578c url(<%= asset_path "blackprint.jpg" %>) repeat right top;
+	color: #fff;
+	border: none;
+}
+
+#nav ul{
+	overflow:auto;
+	margin: 0;
+	padding: 0 20px;
+	list-style: none;
+}
+
+#nav ul li{
+	float: left;
+	text-transform: uppercase;
+	padding: 12px 10px;
+	font-size: 14px;
+}
+
+#nav ul li a, #nav ul li a:visited{
+	color: #fff;
+	text-decoration: none;
+}
+
+#nav ul li a:hover{
+	color: #e1e1e6;
+	
+}
+
+#nav ul li:hover a{
+	color: #222;
+}
+#nav ul li:hover{
+	background: #eee;
+}
+
+#wrapper{
+	background: #f6f6f6;
+	overflow:auto;
+}
+
+#content{
+	width: 800px;
+	margin:0 auto;
+	background: #fff;
+	min-height: 550px;
+	padding: 30px 60px;
+	border-right: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+}
+
+#content h2, #content h1{
+	color: #123a74;
+	font-size: 28px;
+}
+
+#content .result{
+	white-space: pre-wrap;
+	font-family: monospace;
+	display: block;
+
+}
+
+#content .match{
+	font-weight: bold;
+	background: #faffc7;
+}
+
+.filename_matches{
+	font-size: 14px;
+	font-weight: bold;
+	background: #f1f1f1;
+	padding: 5px 10px;
+	font-family: Monospace;
+}
+
+.num-results{
+	color: #33578c;
+	font-weight: bold;
+}
+
+#footer{
+	font-size: 13px;
+	text-align: center;
+	height: 50px;
+	background: #33578c url(<%= asset_path "blueprint.jpg" %>) repeat right top;
+	color: #f2f2f2;
+	border: none;
+	padding: 10px 0 0 0;
+}
+
+#footer a, #footer a:visited{
+	color: #fff;
+}
+
+#footer a:hover{
+	color: #e3e3e3;
+}
+
+input[type=submit], input[type=button], .button-link{
+	border: 1px solid #222;
+	font-size: 14px;
+	padding: 5px 10px;
+	color: #fff !important;
+	background: #33578c;
+	text-decoration: none;
+}
+
+input[type=submit]:hover, input[type=button]:hover, .button-link:hover{
+	color: #33578c !important;
+	background: #fff;
+	cursor: pointer;
+}
+
+.field{
+	margin: 10px 0;
+}
+
+.tab-group{
+	overflow: auto;
+	
+}
+
+.tab-active{
+	border-bottom: 1px solid #fefefe !important;
+	border-top: 4px solid #33578c !important;
+	background: #fefefe !important;
+	color: #000 !important;
+	padding-top: 10px !important;
+}
+
+.tab-content{
+	overflow: auto;
+	background: #fefefe;
+	border: 1px solid #888;
+	padding: 30px;
+	margin-top: -1px;
+}
+
+.tab{
+	font-size: 12px;
+	background: #f5f5f5;
+	border: 1px solid #888;
+	border-bottom: 1px solid #888;
+	z-index: 50;
+	float: left;
+	text-align: center;
+	padding: 10px 15px;
+	padding-top: 13px;
+	margin-right: 10px;
+	cursor: pointer;
+	color: #666;
+
+}
+
+#content table.index-table{
+	border-collapse: collapse;
+	width: 100%;
+	font-size: 14px;
+}
+
+#content table.index-table td, #content table.index-table th{
+	border: 1px solid #888;
+	padding: 5px 8px;
+}
+
+#content table.index-table thead{
+	background: #33578c;
+	color: #fff;
+}
+
+.show{
+	background: transparent url(<%= asset_path "show.png" %>) no-repeat;
+}
+
+.destroy{
+	background: transparent url(<%= asset_path "destroy.png" %>) no-repeat;
+}
+
+.back{
+	background: transparent url(<%= asset_path "back.png" %>) no-repeat;
+}
+
+.new{
+	background: transparent url(<%= asset_path "new.png" %>) no-repeat;
+}
+
+.manage{
+	background: transparent url(<%= asset_path "manage.png" %>) no-repeat;
+}
+
+.email{
+	background: transparent url(<%= asset_path "email.png" %>) no-repeat;
+}
+
+.backup{
+	background: transparent url(<%= asset_path "backup.png" %>) no-repeat;
+}
+
+.email_forward{
+	background: transparent url(<%= asset_path "email_forward.png" %>) no-repeat;
+}
+
+.catch_all{
+	background: transparent url(<%= asset_path "catch_all.png" %>) no-repeat;
+}
+
+.upload{
+	background: transparent url(<%= asset_path "upload.png" %>) no-repeat;
+}
+
+.edit{
+	background: transparent url(<%= asset_path "edit.png" %>) no-repeat;
+}
+
+.explore{
+	background: transparent url(<%= asset_path "explore.png" %>) no-repeat;
+}
+
+.log{
+	background: transparent url(<%= asset_path "log.png" %>) no-repeat;
+}
+
+.sync{
+	background: transparent url(<%= asset_path "sync.png" %>) no-repeat;
+}
+
+.working_copy{
+	background: transparent url(<%= asset_path "working_copy.png" %>) no-repeat;
+}
+
+.mini-icon{
+	padding-left: 22px;
+	padding-bottom: 2px;
+}
+
+.checkout{
+	background: transparent url(<%= asset_path "checkout.png" %>) no-repeat;
+}
+
+.update{
+	background: transparent url(<%= asset_path "update.png" %>) no-repeat;
+        
+}
+
+.button_lock{
+	background: transparent url(<%= asset_path "lock.png" %>) no-repeat;
+        width: 18px;
+        height: 18px;
+        float:right;
+        display: block;
+        margin-top:5px;
+
+}
+
+.button_unlock{
+	background: transparent url(<%= asset_path "unlock.png" %>) no-repeat;
+        width: 18px;
+        height: 18px;
+        float:right;
+        display: block;
+}
+
+.check-status{
+	background: transparent url(<%= asset_path "check-status.png" %>) no-repeat;
+}
+
+.serv_restart{
+	background: transparent url(<%= asset_path "serv_restart.png" %>) no-repeat;	
+}
+
+.db_migrate{
+	background: transparent url(<%= asset_path "db_migrate.png" %>) no-repeat;
+}
+
+.assets{
+	background: transparent url(<%= asset_path "assets.png" %>) no-repeat;
+}
+
+.rollback{
+	background: transparent url(<%= asset_path "rollback.png" %>) no-repeat;
+}
+
+.bundle_install{
+	background: transparent url(<%= asset_path "bundle_install.png" %>) no-repeat;
+}
+
+.history{
+	background: transparent url(<%= asset_path "history.png" %>) no-repeat;
+}
+
+.all{
+	background: transparent url(<%= asset_path "all.png" %>) no-repeat;
+}
+
+abbr{
+	cursor: help;
+}
+
+h3{
+	font-size: 20px;
+	color: #4274bc;
+}
+
+h4{
+	font-size: 16px;
+	color: #3d5982;
+	margin-bottom: 5px;
+}
+
+.svn-descr{
+	color: #555;
+	padding: 0;
+	margin: 0;
+	margin-bottom: 10px;
+	font-size: 14px;
+}
+
+table.svn-files{
+	border: 1px solid #ddd;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table.svn-files thead th{
+	background: #eee;
+	color: #000;
+	text-align: left;
+}
+
+table.svn-files td, table.svn-files th {
+	padding: 5px;
+	vertical-align: middle;
+	font-size: 13px;
+}
+
+table.svn-files td.action-cell{
+	width: 50px;
+}
+
+a, a:link, a:visited{
+	color: #33578c;
+}
+
+a:hover{
+	color: #4274bc;
+}
+
+.mono{
+	font-family: "Courier New";
+	font-size: 80%;
+}
+
+.optional{
+	font-size: 12px;
+	color: #555;
+}
+
+.cent-cell{
+	text-align: center;
+}
+
+td.error{
+	color: #a00;
+}
+
+td.ok{
+	color: #0a0;
+}
+
+td.red{
+	background: #d74b4b;
+}
+
+td.green{
+	background: #92eb66;
+}
+
+td.grey{
+	background: #ccc;
+}
+
+.specific-actions{
+	font-size: 13px;
+	font-variant: small-caps;
+	margin: 10px 0 4px 0;
+	color: #666;
+}
+
+.notice{
+	background: #daf6fb url(<%= "info.png" %>) no-repeat 10px center;
+	color: #222;
+	border: 1px solid #ccc;
+	padding: 11px 20px 8px 32px;
+	font-size: 14px;
+	overflow: auto;
+}
+
+.error{
+	background: #f1cfcf url(<%= "inactive.png" %>) no-repeat 10px center;
+	color: #222;
+	border: 1px solid #ccc;
+	padding: 11px 20px 8px 32px;
+	font-size: 14px;
+	overflow: auto;
+}
+
+table.inner-table tr:first-child td:first-child{
+	border-left: none !important;
+}
+
+table.inner-table tr:last-child td{
+	border-bottom: none !important;
+}
+
+table.inner-table tr td:last-child{
+	border-right: none !important;
+}
+
+.output{
+	white-space: pre-wrap;
+	font-family: monospace;
+	display: block;
+	background: #eee !important;
+}
+
+.show-details{
+	margin-bottom: 10px;
+	font-size: 80%;
+	text-decoration: none;
+}
+
+#welcome-wrapper{
+	overflow: auto;
+	text-align: center;
+	margin: 0 auto;
+	width: 92%;
+}
+
+.welcome-box{
+	
+	padding: 10px;
+	float:left;
+	
+	margin-right: 40px;
+}
+
+.welcome-box p{
+	color: #333;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+h1 a, h1 a:hover,h1 a:visited{
+	color: #fff;
+	text-decoration:none;
+	cursor: pointer;
+}
+
+.inline{
+  display:inline
+}
+
+.log_text{
+	white-space: pre-wrap;
+	font-family: monospace;
+	display: block;
+        width:700px;
+        height:300px;
+        background:#E9EFF8;
+        overflow-y:scroll;
+        
+}
+
+#lines{
+  width:50px;
+}
+
+td.backup-finished{
+	background: #c8f2c0;
+}
+
+td.backup-failed{
+	background: #f48080;
+}
+
+td.backup-upload_failed{
+	background: #f2c693;
+}
+
+td.backup-inprocess{
+	background: #aeddf3;
+}
+
+td.backup-uploading{
+	background: #e7d8f4;
+}
+
+abbr.gray{
+	background: #ccc;
+}
+
+.db_list{
+	list-style: none;
+	padding: 0;
+}
+
+
+/* Pardi CSS */
+
+.menu-for-hover{
+  background: #e1e1e6;
+  
+}
+
+.menu-for-hover a{
+  color: #222222 !important;
+}
+
+/* Fin Pardi CSS */

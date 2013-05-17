@@ -1,0 +1,127 @@
+// Place all the styles related to the RemoteServers controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#content table.row_account_cron > tbody > tr > td {
+    border: none;
+    
+}
+
+#content table.row_account_cron table.accounts_manage {
+    border-collapse:collapse;
+    width: 470px;
+}
+
+#content table.row_account_cron table.accounts_manage th {
+    border-right: none;
+}
+
+#content table.crons_table th.th_date {
+    width: 30px;
+}
+
+#content table.row_account_cron table.accounts_manage th:last-child {
+    border-left: none;
+}
+
+#content table.row_account_cron table.accounts_manage tr td:first-child {
+    border-right: none;
+}
+
+#content table.row_account_cron table.accounts_manage th a:link{
+    color: #FFFFFF;
+}
+
+#content table.row_account_cron table.accounts_manage th.first_col{
+    width: 60%;
+}
+
+#content table.row_account_cron table.accounts_manage th.second_col{
+    width: 40%;
+}
+#content table.row_account_cron table.accounts_manage th a:link{
+    color: #FFFFFF;
+}
+
+#content table.row_account_cron table.accounts_manage th a:visited{
+    color: #FFFFFF;
+}
+
+#content table.row_account_cron table.accounts_manage tr td:last-child {
+    border-left: none;
+}
+
+#content table.row_account_cron table.accounts_manage tr td{
+    border-top: none;
+    border-bottom: none;
+}
+
+#content table.row_account_cron table.accounts_manage tr:last-child td{
+    border-bottom: 1px solid #888;
+}
+
+#content table.index-table th.options_backups{
+    width: 56px;
+}
+
+#content table.row_account_cron td.label{
+    min-width: 100px;
+}
+
+#content table.row_account_cron td.td_account{
+    min-width: 100px;
+}
+
+#content table.email_account_table{
+    border: 1px solid #888888;
+    min-width: 300px;
+}
+
+#content table.email_forward_table{
+    border: 1px solid #888888;
+    min-width: 470px;
+}
+
+#content table.crons_table{
+    border: 1px solid #888888;
+    width: 600px;
+    text-align: center;
+}
+
+.bold {
+  font-weight:bold;
+}
+
+.input_catch_all{
+  width: 350px;
+}
+
+#content table.catch_all_table{
+    width: 350px;
+}
+
+#content table.catch_all_table tr td{
+    border-top: none;
+    border-bottom: none;
+}
+
+#content table.catch_all_table tr td:last-child{
+    border-left: none;
+    text-align: right;
+}
+
+#content table.catch_all_table tr td:first-child{
+    border-right: none;
+}
+
+#content table.catch_all_table tr:last-child td{
+    border-bottom: 1px solid #888888;
+}
+
+#content table.catch_all_table tr:first-child td{
+    border-top: 1px solid #888888;
+}
+
+.email_from{
+    width: 150px;
+}

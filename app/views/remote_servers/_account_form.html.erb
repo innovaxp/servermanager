@@ -1,0 +1,72 @@
+<%
+if params[:action] == "new_account" || params[:action] == "create_account"
+  the_action = "create_account"
+else
+  the_action = "update_account"
+end
+
+%>
+
+<%= form_for(@remote_server.becomes(RemoteServer), :url => {:action => the_action}) do |f| %>
+  <% if @remote_server.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@remote_server.errors.count, "error") %> prohibited this remote_server from being saved:</h2>
+      <ul>
+      <% @remote_server.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= _('Account name') %>:<br />
+    <%if params[:action] != 'edit_account'%>
+      <%= f.text_field :user, :required => (params[:action] == "new_account") %>
+    <%else%>
+      <%= f.text_field :user, :required => (params[:action] == "new_account"), :readonly => true %>
+    <%end%>
+  </div>
+  <% if params[:action] != "new_account"%>
+
+    <div style="color: red;">
+      <%=_('Leave blank to keep unchanged.')%>
+    </div>
+  <%end%>
+  <div class="field">
+    <%= _('Password') %>:<br />
+    
+    <%= f.password_field :password, :required => (params[:action] == "new_account"), :autocomplete => 'off' %>
+    
+ 
+  </div>
+  <div class="field">
+    <%= _('Password confirmation') %>:<br />
+    <%= f.password_field :password_confirmation, :required => (params[:action] == "new_account"), :autocomplete => 'off' %>
+  </div>
+
+  <div class="field" <% if params[:action] != 'edit_account'%> style="display: none;"<%end%>>
+    
+    <%= check_box_tag :password_change %><%= _('Propagate password change to server (MySQL, FTP...)') %>
+  </div>
+  <div class="field">
+    <%= _('Domain') %>:<br />
+    <%if params[:action] != 'edit_account'%>
+      <%= f.text_field :host, :required => (params[:action] == "new_account") %>
+    <%else%>
+      <%= f.text_field :host, :required => (params[:action] == "new_account"), :readonly => true %>
+    <%end%>
+    
+  </div>
+  <div class="selector">
+    <%= _('Type') %>:<br />
+    <%= f.select :meta, options_for_select(["PHP", "Rails"], :selected => "PHP") %>
+  </div>
+
+  <%= f.hidden_field :root_remote_server_id %>
+<br/>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<br/>
+<% end %>

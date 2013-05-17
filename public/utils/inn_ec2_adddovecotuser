@@ -1,0 +1,88 @@
+#!/bin/sh
+if [ ! $# < 2 ]
+ then
+  echo "[E] Usage: $0 [create|update] username@domain password"
+  echo "           $0 list domain"
+  exit 4
+fi	 
+	 
+# List accounts for a specific domain	 
+if [ $1 = 'list' ]
+then
+	domain=$2
+	ls "/home/vmail/$domain" -m | sed -e 's/, /,/g'
+fi
+
+if [ $1 = 'create' -o $1 = 'update' ]; then
+	user=`echo "$2" | cut -f1 -d "@"`
+	domain=`echo "$2" | cut -s -f2 -d "@"`
+	password=$3
+
+	if [ $domain = '' ]
+	then
+	echo "[E] No domain given\nUsage: $0 username@domain password"
+	exit 1
+	fi
+
+	if [ ! -d "/home/vmail/$domain" ]
+	then
+	     echo "[E] Specified domain $domain does not exists"
+	     exit 2
+	fi
+
+	# Create a new account on a domain	 
+	if [ $1 = 'create' ]
+	then	 
+	
+		if [ -d "/home/vmail/$domain/$user" ]
+		then
+		     echo "[E] Account $user@$domain already exists"
+		     exit 3
+		fi 
+
+		echo "Adding user $user@$domain to /etc/dovecot/users"
+		echo "$user@$domain::5000:5000::/home/vmail/$domain/$user/:/bin/false::" >> /etc/dovecot/users
+
+		# Create the needed Maildir directories
+		echo "Creating user directory /home/vmail/$domain/$user"
+		# maildirmake.dovecot does only chown on user directory, we'll create domain directory instead
+		if [ ! -x /home/vmail/$domain ]
+		then
+		mkdir /home/vmail/$domain
+		chown 5000:5000 /home/vmail/$domain
+		chmod 700 /home/vmail/$domain
+		fi
+		/usr/bin/maildirmake.dovecot /home/vmail/$domain/$user 5000:5000
+		# Also make folders for Drafts, Sent, Junk and Trash
+		/usr/bin/maildirmake.dovecot /home/vmail/$domain/$user/.Drafts 5000:5000
+		/usr/bin/maildirmake.dovecot /home/vmail/$domain/$user/.Sent 5000:5000
+		/usr/bin/maildirmake.dovecot /home/vmail/$domain/$user/.Junk 5000:5000
+		/usr/bin/maildirmake.dovecot /home/vmail/$domain/$user/.Trash 5000:5000
+
+		# To add user to Postfix virtual map file and relode Postfix
+		#echo "Adding user to /etc/postfix/vmaps"
+		#echo $1  $domain/$user/ >> /etc/postfix/vmaps
+		#postmap /etc/postfix/vmaps
+		#postfix reload
+
+		# Add host on exim4
+		echo "$user : vmail@localhost" >> /etc/exim4/virtual/$domain
+		service exim4 restart
+	fi
+  	
+	# Update account password
+	
+	echo "\nCreate a password for the new email user"
+	#SWAP THE FOLLOWING passwd LINES IF USING A UBUNTU VERSION PRIOR TO 12.04
+	#passwd=`dovecotpw`
+	passwd=`doveadm pw -u $user -p $password`
+	echo "Adding password for $user@$domain to /etc/dovecot/passwd"
+
+	if [ ! -x /etc/dovecot/passwd ]
+	then
+		touch /etc/dovecot/passwd
+		chmod 640 /etc/dovecot/passwd
+	fi
+	echo  "$user@$domain:$passwd" >> /etc/dovecot/passwd
+fi
+exit 0

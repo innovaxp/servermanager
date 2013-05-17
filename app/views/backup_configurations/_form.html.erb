@@ -1,0 +1,192 @@
+<% type = @backup_configuration.type %>
+<%= form_for(@backup_configuration.becomes(BackupConfiguration)) do |f| %>
+  <% if @backup_configuration.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@backup_configuration.errors.count, "error") %> prohibited this backup_configuration from being saved:</h2>
+
+      <ul>
+      <% @backup_configuration.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%#= raise  @remote_server.to_s%>
+  <div class="field" <% if @remote_server %>style="display:none;"<% end %>>
+    <%= _("Remote Server")%>: <br />
+    <%#= raise @remote_servers.to_yaml %>
+    <%= f.select :remote_server_id, @remote_servers.map{ |c| [c.description, c.id] } %>
+  </div>
+
+  <div class="field" <% if type =~ /DataBase/ %> style="display: none;"<%end%>>
+    <%= _("Folder")%>:<br />
+    <%= f.text_field :folder %>
+  </div>
+  
+  <div class="field" <% if type =~ /File/ %> style="display: none;"<%end%>>
+    <%= _("DB User")%>:<br />
+    <%#= f.text_field :db_user%>
+    <%= f.text_field :db_user, :value => @remote_server.user.to_s %>
+  </div>
+
+  <div class="field" <% if type =~ /File/ %> style="display: none;"<%end%>>
+    <%= _("DB Password")%>:<br />
+    <%#= f.password_field :db_password%>   <%#= link_to _('List databases'), {:action => 'get_user_databases'}, :id => 'list_db', :class => 'button-link' %> <%= image_tag 'loading_wheel.gif', :id => 'loading_dbs', :style => 'vertical-align:middle; display:none', :width => 24, :height => 24 %>
+    <%= f.password_field :db_password, :value => @remote_server.password.to_s%>   <%= link_to _('List databases'), {:action => 'get_user_databases'}, :id => 'list_db', :class => 'button-link' %> <%= image_tag 'loading_wheel.gif', :id => 'loading_dbs', :style => 'vertical-align:middle; display:none', :width => 24, :height => 24 %>
+  </div>
+  
+  <div id="db_list">
+    <% if @backup_configuration.databases != nil %>
+    <ul class="db_list">
+      <% @backup_configuration.databases.each do |db| %>
+      <li>
+        <input checked="checked" type="checkbox" value="<%=db%>" name="backup_configuration[databases][]" /><%=db%></li>
+      <%end %>
+    </ul>
+  <%end%>
+
+    <%= hidden_field_tag "backup_configuration[type]", type  %>
+    
+  </div>
+  
+  <div class="field">
+    <%= _("Local Folder")%> <abbr title="<%= _('This is the folder where the backup will be stored localy on the remote server. Remember that this must be a remotely accesible place, like "public_html" or "rails_apps/myproject/public"') %>" class="gray">?</abbr>:<br />
+    <%= f.text_field :local_folder %>
+  </div>
+  <div class="field">
+    <%= _("Local Folder URL")%> <abbr title="<%= _('This is the URL associated to the folder configured previously') %>" class="gray">?</abbr>:<br />
+    <%= f.text_field :local_folder_url %>
+  </div>
+<div class="field">
+    <%= _("File Name")%>:<br />
+    <%= f.text_field :name %> .sql.gz<br/>
+	<span style="font-size:12px"><%= link_to _("You can use these date formats"),'http://www.ruby-doc.org/core-1.9.2/Time.html#method-i-strftime',:target => "_blank" %></span>
+  </div>
+  <div class="field">
+    <%= _("Upload Service")%>: <%= link_to _('New Upload service'), {:controller => 'upload_services', :action => 'new', :format => 'iframe'}, :class => 'new mini-icon', :style => 'font-size:14px' %> <br/>
+    <%= collection_select('backup_configuration',:upload_service_id,@upload_services,:id,:nice_name, {:include_blank => _('No upload Service')}) %>
+  </div>
+  <div class="field">
+   <%= _("Remove Local")%> <abbr title="<%= _('Remove the backup from the remote server once the backup is complete and uploaded successfully') %>" class="gray">?</abbr>: 
+    <%= f.check_box :remove_local, :disabled => 'disabled' %>
+  </div>
+  <div class="field">
+   <%= _("Active")%> <abbr title="<%= _('This makes the backup to run automatically with a cron') %>" class="gray">?</abbr>:
+    <%= f.check_box :active %>
+  </div>
+  <div class="field">
+    <%= _("Period")%>:<br />
+    <%= f.number_field :period_number %> <%= f.select(:period_unit,@period_units) %>
+  </div>
+  <div class="field">
+    <%= _("Notifiy to")%> <abbr title="<%= _('Comma separated list of email addresses') %>" class="gray">?</abbr>:<br />
+    <%= f.text_area :notify_to_cs %>
+  </div>
+  <div class="actions">
+    <%= f.submit  _('Create Database Backup configuration') %>
+  </div>
+<% end %>
+
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+      jQuery('.new').live('click',function(){
+        
+        jQuery.fancybox({
+            titleShow     : false,
+            href: jQuery(this).attr('href'),
+            padding	: 20,
+            width: 780,
+            height: 600,
+            autoDimensions: false,
+            onComplete : function(){
+              jQuery('#new_upload_service').ajaxForm({
+              dataType: 'json',
+              success: function(responseText, statusText, xhr){
+                jQuery('#backup_configuration_upload_service_id').append('<option value="'+responseText.id+'">'+responseText.name+'</option>');
+
+                jQuery('#fancybox-close').trigger('click');
+                return false;
+               },
+              error: function(responseText, statusText, xhr){
+
+              }
+            });
+
+            }
+
+        });
+      return false;
+
+      });
+	  
+      jQuery('#backup_configuration_all_dbs').live('click',function(){
+        jQuery('#backup_configuration_db_name').val('')
+        jQuery('#backup_configuration_db_name').parent().toggle('slow')
+      });
+	  
+	  jQuery('#list_db').live('click', function(){
+
+            var backups_already_checkeds = '';
+
+            jQuery('#db_list').find('li input').each(function(){
+              if (jQuery(this).is(':checked')){
+               backups_already_checkeds = backups_already_checkeds + '&databases[]='+jQuery(this).val();
+              }
+            })
+            
+		  jQuery.ajax({
+			  url: jQuery(this).attr('href'),
+			  data: 'user='+encodeURIComponent(jQuery('#backup_configuration_db_user').val())+'&password='+encodeURIComponent(jQuery('#backup_configuration_db_password').val())+'&remote_server_id='+jQuery('#backup_configuration_remote_server_id option:selected').val()+backups_already_checkeds,
+              dataType: 'json',
+			  beforeSend: function ( xhr ) {
+				  jQuery('#loading_dbs').show();
+			  },
+              success: function(responseText, statusText, xhr){
+				  jQuery('#loading_dbs').hide();
+				  
+				  if(!responseText || responseText == '' || responseText.length == 0){
+					  alert('<%= _("Cannot connect to the database") %>')
+				  }
+				  else{
+					  jQuery('#db_list').html('<ul class="db_list"></ul>');
+				  
+					  for(var db in responseText ){
+
+                                                  if(responseText[db] == 'unchecked'){
+                                                    jQuery('#db_list ul').append('<li><input type="checkbox" value="'+db+'" name="backup_configuration[databases][]" /> '+db+'</li>');
+                                                  }else{
+                                                    jQuery('#db_list ul').append('<li><input type="checkbox" checked="checked" value="'+db+'" name="backup_configuration[databases][]" /> '+db+'</li>');
+                                                  }
+
+
+						  
+					  }
+				  }
+			  }
+		  });
+		  
+		  return false;
+	  });
+  });
+
+function check_remove(){
+  if (jQuery('#backup_configuration_upload_service_id').val() != ''){
+    jQuery('#backup_configuration_remove_local').removeAttr('disabled');
+  }else{
+    jQuery('#backup_configuration_remove_local').attr('disabled','disabled')
+  }
+
+}
+
+jQuery(document).ready(function(){
+  check_remove();
+})
+
+jQuery('#backup_configuration_upload_service_id').live('change',function(){
+  check_remove();
+})
+
+</script>
+
+

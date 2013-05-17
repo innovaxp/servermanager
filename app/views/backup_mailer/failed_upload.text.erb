@@ -1,0 +1,8 @@
+<%= _('Cheers from Innova Server Manager')  %>
+===============================================
+
+<%= sprintf(_('Your Backup for %s with ID %d has finished with errors. The backup could not be uploaded to the desired services, you could retry the upload or wait until the next period'), @backup_configuration.remote_server.description.to_s, @backup.id) %>
+
+<%= sprintf(_('To retry the upload or check more details, click here: %s'), ) %>
+
+<%= _('Thanks for using Innova Server Manager') %>

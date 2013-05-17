@@ -1,0 +1,85 @@
+<%= form_tag("create_cron") do %>
+  <table class="cron_field_list">
+    <tr>
+      <td><%= _('Common Settings') %>:</td>
+      <td>
+
+          <%= select_tag :meta, options_for_select(@common_settings_for_select), :class => 'selector' %>
+
+      </td>
+    </tr>
+    <% @field_list.each do |k,v| %>
+      <tr>
+        <td><%= v %>:</td>
+        <td><%= eval ('cron_'+k+'_fields') %></td>
+      </tr>
+    <%  end %>
+
+    <tr>
+      <td><%= _('Active') %>:</td>
+      <td><%= check_box_tag :active %></td>
+    </tr>
+    <tr>
+      <td><%= _('Command') %>:</td>
+      <td><%= text_field_tag :command %></td>
+    </tr>
+
+      <%= hidden_field_tag :id, params[:id] %>
+
+
+  </table>
+  <div class="actions">
+    <%= submit_tag ('Save') %>
+  </div>
+  <br/>
+  <%
+  if !@remote_server.root_remote_server_id
+    
+    link_dest = remote_servers_path+'?open_account='+@remote_server.id.to_s
+  else
+    link_dest = remote_servers_path+'?open_account='+@remote_server.root_remote_server_id.to_s
+  end
+  
+  %>
+
+    <%= link_to _('Back'), link_dest, :class => "back mini-icon" %>
+  
+<% end %>
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+
+      jQuery('.select_cron').change(function(){
+       // desde el select actual, subimos hasta el div mas próximo, desde ahi bajamos
+       // hasta encontrar el primer elemento de la clase "input_cron" (input) y cambiamos
+       //  su value por el valor de la option seleccionada
+       jQuery(this).closest('div').find('.input_cron').eq(0).val(jQuery(this).val());
+       
+      });
+      
+      //cuando modificamos el value del input actual, cambiamos la opcion seleccionada del select
+      // para el proceso de busqueda sigo los mismos pasos que arriba
+      //cuando se cambian con las flechas del teclado
+      jQuery('.input_cron').keyup(function() {
+        jQuery(this).closest('div').find('.select_cron').eq(0).val(jQuery(this).val());
+        if(jQuery('.input_cron').val() != jQuery('.select_cron').val())
+           jQuery(this).closest('tbody').find('.selector').eq(0).val('--');
+        });
+
+      //cuando cambia el select de common settings, cambian los valores de los de abajo
+      jQuery('.selector').change(function(){
+        
+        var tmp = jQuery(this).val().split('|');
+        var tmp2;
+        for (var i=0; i<tmp.length;i++){
+          
+          tmp2 = tmp[i].split(';');
+        
+            jQuery('.select_cron').each(function(){
+              jQuery('.input_cron[name='+tmp2[0]+']').val(tmp2[1]);
+              jQuery('.input_cron[name='+tmp2[0]+']').trigger('keyup');
+            });
+        }//for
+      });
+  });
+</script>

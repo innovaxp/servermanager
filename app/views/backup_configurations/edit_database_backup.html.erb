@@ -1,0 +1,8 @@
+<h1><%= _('Editing Database Backup Configuration') %></h1>
+
+<%= render 'form' %>
+<br/>
+<%#= raise @backup_configuration.to_yaml %>
+<%#= link_to _('Show'), @backup_configuration, :class => "show mini-icon" %> 
+<%#= link_to _('Back'), backup_configurations_path+'?open_account='+@backup_configuration.remote_server_id.to_s, :class => "back mini-icon" %>
+<%= link_to _('Back'), request.referer, :class => "back mini-icon" %>

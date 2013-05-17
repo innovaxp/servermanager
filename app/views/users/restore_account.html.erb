@@ -1,0 +1,7 @@
+<h1><%= _('Editing user') %></h1>
+<%if @email && !@email.active%>
+<h2><%= @email.status %></h2>
+<%else%>
+<%= render 'form' %>
+<%end%>
+<%= link_to _('Back') , users_url, :class => "back-link navigation-link" %>

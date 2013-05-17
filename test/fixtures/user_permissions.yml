@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: 1
+  repository_id: 1
+  read_permission: false
+  write_permission: false
+
+two:
+  user_id: 1
+  repository_id: 1
+  read_permission: false
+  write_permission: false

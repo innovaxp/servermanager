@@ -1,0 +1,6 @@
+<h1><%= _('New Upload Service') %></h1>
+
+<%= render 'form' %>
+<% if !@nobuttons %>
+	<%= link_to _('Back'), upload_services_path, :class => 'back mini-icon' %>
+<% end %>

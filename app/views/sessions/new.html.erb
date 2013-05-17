@@ -1,0 +1,23 @@
+<div class="depot_form">
+  <% if flash[:alert] %>
+    <p id="infobox"><%= flash[:alert] %></p>
+  <% end %>
+
+    
+
+  <%= form_tag('/login') do  %>
+    <% if @from != 'index' %>
+    <h2><%= _('Log In') %></h2>
+    <p><%=  _("Enter your email and password to access")  %>:</p>
+    <%end%>
+    <table class="noalt" style="width: 400px;text-align:left;font-size: 18px;">
+      
+      <tr><td><label for="email"><%= _("Email:")%></label></td><td> <%= text_field_tag :email, params[:email] %></td></tr>
+
+      <tr><td><label for="password"><%= _("Password")%>:</label></td><td> <%= password_field_tag :password, params[:password] %></td></tr>
+      <tr><td></td><td><%= submit_tag _("Login") %></td></tr>
+      
+    </table>
+
+  <% end %>
+</div>

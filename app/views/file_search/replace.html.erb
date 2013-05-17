@@ -1,0 +1,71 @@
+<h2><%= _('Replace on files')  %></h2>
+
+<%= form_tag :action => 'replace' do %>
+<div style="overflow: auto">
+	<div class="tab-group">
+		<div id="local-tab" class="tab <% if @selected_tab == 'local' %>tab-active<% end %>" ><%= _('On local server') %></div>
+		<div id="remote-tab" class="tab <% if @selected_tab == 'remote' %>tab-active<% end %>"><%= _('On remote server') %></div>
+	</div>
+	<div class="tab-content">
+		<div style="float:left;width: 650px;">
+			<p id="remote" class="location-fields" <% if @selected_tab != 'remote' %>style="display:none"<% end %>><b><%= _('Remote servers') %>:</b> <%= select_tag(:remote_servers, options_from_collection_for_select(@remote_servers, 'id', 'description', @selected_server ? @selected_server.id : ''), :prompt => _('Select a remote server...')) %></p>
+			<p><b><%= _('Folder') %>:</b> <%= text_field_tag :folder, params[:folder] ? params[:folder] : '/home/' , {:size => 40}  %><%= check_box_tag :recursive, 1, params[:recursive] ? params[:recursive] : true %><small><%= _('Search recursively') %></small></p>
+			<%= render :partial => 'file_explorer' %>
+			<p><b><%= _('Start delimiter') %>:</b> <%= text_field_tag :start_del, params[:start_del] , {:size => 40}  %></p>
+			<p><b><%= _('End delimiter') %>:</b> <%= text_field_tag :end_del, params[:end_del] , {:size => 40}  %><%= check_box_tag :insensitive, 1, params[:insensitive] ? params[:insensitive] : true %><small><%= _('Case insensitive') %></small></p>
+			<p><b><%= _('Search extensions (comma separated)') %>:</b> <%= text_field_tag :extensions, params[:extensions] ? params[:extensions] : @def_extensions , {:size => 30}  %></p>
+		</div>
+		<div style="float:left">
+			<p id="submit-p" style="margin:30px auto;"><%= submit_tag _('Replace'), {:name => @selected_tab, :id => 'search_btn'}  %></p>
+		</div>
+	</div>
+</div>
+<% end %>
+
+<%
+if @results && @results.kind_of?(Array) && @results.count > 0 %>
+	<p class="num-results"><%= sprintf(_('Matches in %d files'), @results.count) %></p>
+<%
+	@results.each do |result|
+%>
+	
+	<p class="filename_matches"><%= result[:filename] %></p>
+	<p class="result"><%= !result[:matches].valid_encoding? ? CGI::escapeHTML(result[:matches].unpack('C*').pack('U*')) : CGI::escapeHTML(result[:matches]) %></p>
+<% 	end
+
+else %>
+	<p class="num-results"><%= @no_text %></p>
+<%
+end %>
+
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		jQuery('.result').each(function(){
+			filtered_text = ''
+
+			var lines = jQuery(this).text().split('\n')
+
+			jQuery.each(lines, function(index){
+				filtered_text = filtered_text + lines[index].replace(/^(\d+:[^¥]*?$)/g, "<span class=\"match\">$1</span>") + '\n';
+			});
+			jQuery(this).html(filtered_text);
+		});
+
+		jQuery('.tab').bind('click', function(){
+			jQuery('.tab').removeClass('tab-active');
+			jQuery(this).addClass('tab-active');
+
+			jQuery('.location-fields').hide();
+
+			jQuery("#"+jQuery(this).attr('id').split('-')[0]).show();
+
+			jQuery('#submit-p input').attr('name', jQuery(this).attr('id').split('-')[0]);
+		});
+
+		jQuery('#search_btn').click(function(){
+			jQuery('#loading').show();
+		});
+
+	});
+	
+</script>

@@ -1,0 +1,21 @@
+<div id="welcome-wrapper">
+	<div class="welcome-box">
+		<a href="<%= url_for :controller => "file_search", :action => "search" %>">
+			<%= image_tag "search_big.png", :alt => _("Search on files"), :width => 128 %>
+			<p><%= _('Search on files') %></p>
+		</a>
+	</div>
+	<div class="welcome-box">
+		<a href="<%= url_for :controller => "repositories", :action => "index" %>">
+			<%= image_tag "repository_big.png", :alt => _("List of SVN repositories"), :width => 128 %>
+			<p><%= _('SVN Repository Manager') %></p>
+		</a>
+	</div>
+        <div class="welcome-box">
+		<a href="<%= url_for :controller => "backup_configurations", :action => "index" %>">
+			<%= image_tag "backup_big.png", :alt => _("List of Backup Configurations"), :width => 128 %>
+			<p><%= _('Backup Manager') %></p>
+		</a>
+	</div>
+
+</div>

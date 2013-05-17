@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ $# -lt 2 ]; then
+	echo "Invalid arguments\nUsage: $0 [create|delete] existing_acc destination"
+	echo "                          $0 list domain"
+	exit 1
+fi
+
+if [ $1 = 'list' ]; then
+	domain=$2
+	
+	result=`sed -e 's/vmail@localhost,//g' /etc/exim4/virtual/$domain`
+	echo "$result" | sed -e 's/vmail@localhost//g'
+fi
+
+if [ $1 = 'create' -o $1 = 'delete' ]; then
+	from=$2
+	to=$3
+	domain=`echo "$from" | cut -s -f2 -d "@"`
+	account_name=`echo "$from" | cut -s -f1 -d "@"`
+	
+	if [ $1 = 'create' ]; then
+		line_n=`cut -f1 -d: /etc/exim4/virtual/$domain | grep -n $account_name | head -n1 | cut -f1 -d:`
+
+		sed -e $line_n"s/\(.*\)/\1, $to/" -i /etc/exim4/virtual/$domain
+	fi
+	
+	if [ $1 = 'delete' ]; then
+		line_n=`cut -f1 -d: /etc/exim4/virtual/$domain | grep -n $account_name | head -n1 | cut -f1 -d:`
+
+		sed -e $line_n"s/\(, $to\)/\1/" -i /etc/exim4/virtual/$domain
+	fi
+fi

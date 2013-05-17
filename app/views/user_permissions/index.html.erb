@@ -1,0 +1,35 @@
+<h1><%= _('Listing user_permissions')%></h1>
+
+<table class="index-table">
+
+  <thead>
+    <tr>
+      <th><%= _('Repository') %></th>
+      <th><%= _('Users with permissions') %></th>
+      <th><%= _('Actions') %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @repositories.each do |repository| %>
+      <tr>
+        <td><%= link_to repository.description, url_for(:controller => 'working_copies', :action => 'index', :repository_id => repository.id)%></td>
+        <td>
+          <%
+          #Para cada usuario con permisos en este repositorio, mostrar su enlace
+          UserPermission.get_users_with_permission(repository.id).each do |us|
+          %>
+            <%= link_to us.name , user_path(us) %>, 
+          <% end %>
+        </td>
+        <td style="text-align: center">
+          <%= link_to '', {:action => 'edit_permissions_on_repository', :repository_id => repository.id}, :title => _('Edit'), :class => 'edit mini-icon' %>&nbsp;&nbsp;
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br />
+
+<%# link_to 'New User permission', new_user_permission_path, :class => 'new mini-icon' %>

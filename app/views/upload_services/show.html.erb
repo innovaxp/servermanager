@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b><%=_("Name")%>:</b>
+  <%= @upload_service.name %>
+</p>
+
+<p>
+  <b><%=_("Location")%>:</b>
+  <%= @upload_service.location %>
+</p>
+
+    <% @upload_service.meta.each do |key, value| %>
+      <p>
+         <b><%=key.to_s%>:</b>
+        <%= value.to_s %>
+         </p>
+      <%end%>
+
+<%= link_to _('Edit'), edit_upload_service_path(@upload_service), :class => 'edit mini-icon' %> |
+<%= link_to _('Back'), upload_services_path, :class => 'back mini-icon' %>
+

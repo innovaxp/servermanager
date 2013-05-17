@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  remote_server_id: 1
+  db_name: MyString
+  db_user: MyString
+  db_password: MyString
+  local_folder: MyString
+  local_folder_url: MyString
+  upload_service_id: 1
+  remove_local: false
+  period_unit: 1
+  period_unit: MyString
+  notify_to: MyText
+
+two:
+  remote_server_id: 1
+  db_name: MyString
+  db_user: MyString
+  db_password: MyString
+  local_folder: MyString
+  local_folder_url: MyString
+  upload_service_id: 1
+  remove_local: false
+  period_unit: 1
+  period_unit: MyString
+  notify_to: MyText

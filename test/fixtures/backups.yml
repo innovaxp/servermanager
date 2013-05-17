@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  backup_configuration_id: 1
+  status: MyString
+  meta: MyText
+
+two:
+  backup_configuration_id: 1
+  status: MyString
+  meta: MyText

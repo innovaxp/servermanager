@@ -1,0 +1,6 @@
+<h1><%= _('New Backup Configuration') %></h1>
+
+<%= render 'form' %>
+<br/>
+
+<%= link_to _('Back'), remote_servers_path+'?open_account='+@remote_server.root_remote_server_id.to_s, :class => 'back mini-icon' %>

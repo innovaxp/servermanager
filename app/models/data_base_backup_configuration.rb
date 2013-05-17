@@ -1,0 +1,5 @@
+class DataBaseBackupConfiguration  < BackupConfiguration
+
+
+
+end

@@ -1,0 +1,60 @@
+
+<% if flash[:error] %>
+<div class="error"><%= flash[:error] %></div>
+<% end %>
+
+<%
+if params[:action] == "new_email_forward"
+  the_action = "create_email_forward"
+else
+  the_action = "update_email_forward"
+end
+%>
+
+<%= form_tag(the_action) do %>
+  <%= _('Redirect emails sent to ') %>:<br />
+  <%#= raise @account_remote_server.list_email_account['data']['list'].to_s %>
+  <%
+  options = Hash.new
+  
+  @account_remote_server.list_email_account['data']['list'].each do |mail|
+     options[mail.to_s] = mail.to_s
+  end
+  options['--'] = "Add new mail"
+
+  %>
+  <%= select_tag :select_email_from, options_from_collection_for_select(options, :first, :last ), :class => 'selector_forwarder' %>
+  <br/>
+  <%#= raise the_action %>
+  <%#=raise params.to_yaml%>
+  <div class="field mail_forward">
+    <%= _('from ') %>:
+
+    <%= text_field_tag :email_from, '',{:placeholder => 'account', :class => 'email_from'} %>@<%=  @account_remote_server.host.to_s%>
+  </div>
+  <div class="field">
+    <%= _('to the address') %>:
+    
+    <%= text_field_tag :email_to, '',{:placeholder => 'user@domain.com', :type  => :email, :required => true} %>
+
+  </div>
+<br/>
+  <div class="actions">
+    <%= submit_tag('Save') %>
+  </div>
+<br/>
+<% end %>
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+
+      jQuery('.selector_forwarder').change(function(){
+        if(jQuery(this).val() == '--'){
+          jQuery('.mail_forward').show();
+        }else
+          jQuery('.mail_forward').hide();
+      });
+    jQuery('.selector_forwarder').trigger('change');
+
+  });
+</script>

@@ -1,0 +1,51 @@
+<%= form_for(@alert) do |f| %>
+  <% if @alert.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@alert.errors.count, "error") %> prohibited this alert from being saved:</h2>
+
+      <ul>
+       
+      <% @alert.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.hidden_field :owner_id %>
+  </div>
+
+  <div>
+<%= _('Select option') %><br>
+<table>
+    
+      
+      <% Alert.defined_alerts.each do |key, value| 
+        #busco si la key es igual al valor action alert si es asi paso el checked a true 
+        #index devuelve
+        # - nil si no lo encuentra
+        # - el índice dentro del array si lo encuentra
+        if !@alert.action_alerts.index {|aa| aa.action == key }.nil?
+          must_be_checked = true
+        else
+          must_be_checked = false
+        end
+      %>
+        <tr>
+          <td><%= check_box_tag 'options[]', key, must_be_checked %></td>
+          <td><%= value %></td>
+        </tr>
+      <%end%>
+      
+    
+</table>
+  </div>
+  <div class="field">
+    <%= _('Additional emails') %><br />
+    <%= f.text_area :additional_emails %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

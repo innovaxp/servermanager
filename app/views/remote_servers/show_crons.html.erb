@@ -1,0 +1,9 @@
+
+<h2><%= _('Configured Crons') %></h2>
+
+<%= render :partial => 'configured_crons' %>
+
+<br/>
+
+<%= link_to _('Back'), remote_servers_path+'?open_account='+@account_remote_server.root_remote_server_id.to_s, :class => "back mini-icon" %>
+<span style="margin-left: 75px;"><%= link_to _('New Cron'), {:action => 'new_cron', :remote_server_id => @account_remote_server.id.to_s}, :class => "new mini-icon" %></span>

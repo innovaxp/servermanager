@@ -1,0 +1,68 @@
+<%= form_for(@upload_service) do |f| %>
+  <% if @upload_service.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@upload_service.errors.count, "error") %> prohibited this upload_service from being saved:</h2>
+
+      <ul>
+      <% @upload_service.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= _("Name")%><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%=_("Location") %><br />
+    <%= f.select('location',@posible_locations) %>
+  </div>
+
+<div class="amazons3" <%= (@location == 'AmazonS3') ? '' : "style='display:none'" %> >
+   <%=  _("Acces Key") %><br />
+    <%= text_field_tag('AmazonS3[access_key]',@upload_service.meta['access_key'])  %><br />
+    <%=_("Secret Key") %><br />
+    <%= text_field_tag('AmazonS3[secret_key]',@upload_service.meta['secret_key'])  %><br />
+     <%=_("Bucket") %><br />
+     <%= text_field_tag('AmazonS3[bucket]',@upload_service.meta['bucket'])  %><br />
+      <%=_("Path") %><br />
+     <%= text_field_tag('AmazonS3[path]',@upload_service.meta['path'])  %><br />
+</div>
+
+<div class="ftp" <%= (@location == 'FTP') ? '' : "style='display:none'" %> >
+     <%=_("Servidor") %><br />
+   <%= text_field_tag('FTP[server]',@upload_service.meta['server'])  %><br />
+      <%=_("Nombre de suario") %><br />
+   <%=  text_field_tag('FTP[user_name]',@upload_service.meta['user_name'])  %><br />
+       <%=_("Contraseña") %><br />
+   <%=  text_field_tag('FTP[password]',@upload_service.meta['password'])  %><br />
+        <%=_("Puerto") %><br />
+   <%=  text_field_tag('FTP[port]',@upload_service.meta['port'])  %><br />
+         <%=_("Ruta") %><br />
+    <%=  text_field_tag('FTP[path]',@upload_service.meta['path'] ) %><br />
+</div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    jQuery('#upload_service_location').change(function(){
+      if( jQuery('#upload_service_location :selected').val()  == 'AmazonS3'){
+       jQuery('.amazons3').show()
+       jQuery('.ftp').hide()
+      }else if( jQuery('#upload_service_location :selected').val()  == 'FTP'){
+         jQuery('.ftp').show()
+       jQuery('.amazons3').hide()
+      }else{
+         jQuery('.ftp').hide()
+       jQuery('.amazons3').hide()
+      }
+    });
+  });
+</script>

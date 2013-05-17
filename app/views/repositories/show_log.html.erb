@@ -1,0 +1,34 @@
+<h1><%= _('Repository full log') %></h1>
+
+<h3><%= _('Main info') %></h3>
+<p><b><%= _('Repository URL') %>:</b> <%= @repo_info['url'] %></p>
+<p><b><%= _('Repository UUID') %>:</b> <%= @repo_info['repository']['uuid'] %></p>
+<p><b><%= _('Revision') %>:</b> <%= @repo_info['revision'] %></p>
+<p><b><%= _('Last Sync') %>:</b> <%= @repository.last_sync_date.strftime("%d-%m-%Y %H:%M:%S") %></p>
+
+<h3><%= _('Commits info') %></h3>
+<% if !@log_info || @log_info.count == 0 %>
+	<h4><%= _('No log info') %></h4>
+<% else %>
+	<% @log_info.each do |value| %>
+		<h4>Rev. <%= value['revision'] %> - <%= value['msg'] && value['msg'].class == String ? value['msg'].to_s : '' %></h4>
+		<p class="svn-descr"><%= sprintf(_('by %s on %s'), value['author'], DateTime.parse(value['date']).strftime("%d-%m-%Y %H:%M:%S")) %></p>
+
+		<table class="svn-files">
+			<thead>
+				<tr><th colspan="2"><%= _('Changed files') %></th></tr>
+			</thead>
+			<tbody>
+			<% value["paths"]["path"] = [ value["paths"]["path"] ] unless value["paths"]["path"].kind_of?(Array) %>
+			<% value["paths"]["path"].each do |entry| %>
+			<tr>
+				<td class="action-cell"><%= image_tag "svn_statuses/"+entry['action']+".png", :title => Repository.get_description_for_status(entry['action']) , :alt => Repository.get_description_for_status(entry['action']) %> </td>
+				<td><%= entry["content"] %></td>
+			</tr>
+			<% end %>
+			</tbody>
+		</table>
+	<% end %>
+<% end %>
+<br/>
+<%= link_to _('Back to repositories'), repositories_path, :class => 'back mini-icon' %>

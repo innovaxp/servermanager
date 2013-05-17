@@ -1,0 +1,145 @@
+<h1><%= _('Listing Remote Servers') %></h1>
+
+<% if flash && flash[:success] != '' %>
+  <div class="success"><%= flash[:success] %></div>
+<% end %>
+
+<table class="index-table">
+  <thead>
+          <tr>
+             <th><%= _('Description') %></th>
+             <th></th>
+          </tr>
+
+  </thead>
+  <tbody>
+    <% @remote_servers.each do |remote_server| %>
+      <tr>
+        <td ><%= remote_server.description %>
+          <%= link_to ' ( '+remote_server.host+' )', 'http://'+remote_server.host, :target => '_blank' %></td>
+        <!--
+        <td><%= remote_server.user %></td>
+        <td style="text-align: center">
+        <%=remote_server.working_copies.count%>&nbsp;
+        <%= link_to '', {:controller => 'working_copies', :action => 'index', :remote_server_id => remote_server.id}, :title => _('Working copies'), :class => 'working_copy mini-icon' %>
+        </td>-->
+        <td style="text-align:center">
+          <%= link_to (image_tag "show.png",:title=>_("Show"),:alt=>_("Show")), remote_server_path(remote_server) %>
+
+          <%= link_to (image_tag "edit.png",:title=>_('Edit'),:alt=>_('Edit')), edit_remote_server_path(remote_server) %>
+
+          <%= link_to image_tag("destroy.png", :title => _("Delete"), :alt => _("Delete")),  {:controller => "remote_servers", :action => "destroy", :id => remote_server.id }, :confirm => _('Are you sure?'), :method => :delete %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <table class="row_account_cron" >
+            <tbody>
+              <tr>
+                <td class="label">
+                  &#9660;<%= link_to  _('Accounts'), '#', :class => 'accounts' %>
+                </td>
+                <td>
+                  <%= link_to _('New account'), {:action => :new_account, :root_remote_server_id => remote_server.id}, :class => 'new mini-icon' %>
+                </td>
+
+              </tr>
+  <%#busco los accounts de un remote server, y los muestro%>
+
+              <% remote_server.account_remote_servers.each do |account|%>
+                <%if account%>
+                  <tr class="accounts_manage accounts_manage_<%=remote_server.id%>" style="display: none;">
+                    <td>
+                      <table class="accounts_manage accounts_manage_<%=remote_server.id%>" style="display: none;">
+
+                        <thead>
+                          <tr>
+                            <th class="th_account first_col"><%= account.host+"  ("+account.user+")"%></th>
+      <%#= link_to (image_tag "show.png",:title=>_("Show"),:alt=>_("Show")), remote_server_path(remote_server) %>
+                            <th class="th_account second_col"><span style="margin-left: 100px;"><%= link_to (image_tag "edit.png",:title=>_('Edit'),:alt=>_('Edit'))%>
+                                <%= link_to _(" Edit"), {:action => :edit_account, :id => account.id}%>
+                              </span>
+      <%#= link_to image_tag("destroy.png", :title => _("Delete"), :alt => _("Delete")),  {:controller => "remote_servers", :action => "destroy", :id => remote_server.id }, :confirm => _('Are you sure?'), :method => :delete %>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="td_manage"><%= link_to _('Email accounts'),{:action => :show_emails_account, :account_remote_servers_id => account.id}, :class => 'email email-accounts mini-icon' %></td>
+                            <td><%= link_to _('New email account'), {:action => :new_email_account, :account_remote_servers_id => account.id}, :class => 'new mini-icon' %></td>
+                          </tr>
+                          <tr>
+                            <td class="td_manage"><%= link_to _('Crons'),{:action => :show_crons, :account_remote_servers_id =>account.id}, :class => 'history accounts-crons mini-icon' %></td>
+                            <td><%= link_to _('New cron'), {:action => :new_cron, :remote_server_id => account.id},:class => 'new mini-icon' %></td>
+                          </tr>
+                          <tr>
+                            <td class="td_manage"><%= link_to _('Files backups'),{:action => 'index', :type =>'FileBackupConfiguration' , :remote_server_id => account.id, :controller => 'backup_configurations'}, :class => ' backup accounts-backup mini-icon' %></td>
+                            <td><%= link_to _('New file backup'), {:action => 'new_file_backup', :remote_server_id => account.id, :controller => 'backup_configurations'},:class => 'new mini-icon' %></td>
+                          </tr>
+                          <tr>
+                            <td class="td_manage"><%= link_to _('Data bases backups'),{:action => 'index', :type =>'DataBaseBackupConfiguration', :remote_server_id => account.id, :controller => 'backup_configurations'}, :class => ' backup accounts-backup mini-icon' %></td>
+                            <td><%= link_to _('New data base backup'), {:action => 'new_database_backup', :remote_server_id => account.id, :controller => 'backup_configurations'},:class => 'new mini-icon' %></td>
+                          </tr>
+                          <tr>
+                            <td class="td_manage"><%= link_to _('Email forwarders'),{:action => :show_emails_forwarders, :account_remote_servers_id => account.id}, :class => 'email_forward accounts-email-forward mini-icon' %></td>
+                            <td><%= link_to _(' New email fordward'),{:action => :new_email_forward, :account_remote_servers_id => account.id} ,:class => 'new mini-icon' %></td>
+                          </tr>
+                          <tr>
+                            <td class="td_manage"><%= link_to _('Catch all'),{:action => :new_catch_all, :domain => account.host, :account_remote_servers_id => account.id}, :class => 'catch_all accounts-catch-all mini-icon' %></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td class="td_manage"><%= link_to _('Dns'),{:action => :show_dns_managements, :remote_server_id => account.id}, :class => 'email_forward accounts-email-forward mini-icon' %></td>
+                            <td><%= link_to _(' New Dns'),{:action => :new_dns, :remote_server_id => account.id} ,:class => 'new mini-icon' %></td>
+                          </tr>
+                          <tr>
+                            <td class="td_manage"><%= link_to "Database Management", 'http://'+account.host+':2082', :target => '_blank', :class => 'email_forward accounts-email-forward mini-icon' %></td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                <%end%>
+              <%end%>
+
+              <tr>
+                <td>
+                  &#9660;<%= link_to _('Crons') %>
+                </td>
+                <td>
+                  <%= link_to _('New cron'), {:action => :new_cron, :remote_server_id => remote_server.id}, :class => 'new mini-icon' %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+
+    <% end %>
+  </tbody>
+</table>
+
+<br />
+
+<%= link_to _('New remote server'), new_remote_server_path, :class => 'new mini-icon' %>
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+
+    jQuery('.accounts').click(function(){
+
+      jQuery(this).closest('tbody').find('.accounts_manage').toggle();
+        
+      return false;
+    });
+
+<% if params[:open_account] && params[:open_account] != '' && params[:open_account].to_i > 0 %>
+      jQuery('.accounts_manage_<%=  params[:open_account]%>').show();
+      jQuery('html, body').animate({
+        scrollTop: jQuery('.accounts_manage_<%=  params[:open_account]%>').offset().top
+      }, 200);
+<% end %>
+      
+  });
+</script>

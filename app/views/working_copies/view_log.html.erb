@@ -1,0 +1,73 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+
+<div style="margin-left:120px;">
+  <h4><%=_("Log for:")%>&nbsp;&nbsp;&nbsp;<%=@working_copy.remote_server_description%></h4>
+</div><br/>
+
+<div style="margin-left: 260px">
+  <%=_("Lines:")%>&nbsp;&nbsp;<%= text_field_tag(:lines) %>&nbsp;&nbsp;<span style="margin-left:80px;"><%= _('Update') %>&nbsp;&nbsp;<span id="act" style="cursor:pointer" class="serv_restart mini-icon long_task"></span></span>
+</div><br/>
+
+<div class="log_text" style="font-size: 13px">
+  
+</div>
+
+<div id="loading-f" style="position:absolute;top:0;left:0;width:100%;height:100%; background: #333; opacity: 0.5; display:none;">
+		<div style="width: 400px; margin: 0 auto;color: #fff;text-align: center;padding-top: 300px;font-size: 26px">
+			<%= image_tag "loading_bar.gif", :width => 128, :height => 15  %><br/>
+			<%= _('Loading') %>
+		</div>
+</div>
+
+
+<script type="text/javascript">
+
+  jQuery('#act').live('click', function(){
+    jQuery('#loading-f').show();
+    lines = jQuery('#lines').val();
+    reload_log(lines);
+  });
+  function reload_log(lines){
+    jQuery.ajax({
+        type: "POST",
+        url:"<%= url_for(:controller=>'working_copies',:action=>"view_log")%>",
+        data:"working_copy_id="+<%=@working_copy.id%>+"&lines="+lines,
+        dataType: 'json',
+         async: true,
+        complete: function(data,textStatus,jqXHR){
+          dataJ = eval( '(' + data.responseText + ')');
+          jQuery('#loading-f').hide();
+          if(dataJ.message && dataJ.message != ''){
+            
+             jQuery(".log_text").text(dataJ.message);
+             jQuery(".log_text").animate({scrollTop:10000}, 'slow');;
+          }
+          else{
+            
+            jQuery(".log_text").text('<%= _("We are sorry but there was a problem getting the log. Please try reloading.") %>');
+          }
+        }
+    });
+  }
+
+  jQuery(document).ready(function(){
+      jQuery('#loading-f').show();
+      reload_log(100);
+
+  });
+
+  jQuery('#act').live('click', function(){
+
+      reload_log(jQuery('#lines').val());
+
+  });
+
+ 
+
+
+</script>
+
+

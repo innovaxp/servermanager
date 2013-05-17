@@ -1,0 +1,78 @@
+<div class="depot_form">
+
+	<%= form_for @user do |f| %>
+		<% if @user.errors.any? %>
+			<div id="error_explanation">
+				<h2><%= pluralize(@user.errors.count, "error") %>
+					prohibited this user from being saved:</h2>
+				<ul>
+					<% @user.errors.full_messages.each do |msg| %>
+						<li><%= msg %></li>
+					<% end %>
+				</ul>
+			</div>
+		<% end %>
+
+		<p style="text-align:right"><strong><%= _("Note") %></strong>: <%= raw  _("fields with the <span class='mandatory'>red asterisk</span> are mandatory.") %></p>
+
+		<h3><%= _("User data") %></h3>
+
+		<div style="overflow:auto">
+			<div style="float:left;margin-right: 40px;">
+				<div  class="field">
+					<%= _("User name") %>:<span class="mandatory">*</span><br/>
+					<%= f.text_field :name, :size => 40, :class => "biginput" %>
+				</div>
+
+				<div  class="field">
+					<%= _("Email") %>:<span class="mandatory">*</span><br/>
+					<%= f.text_field :email, :size => 40, :class => "biginput" %>
+                                        <%= hidden_field_tag(:codec,params[:codec]) %>
+				</div>
+
+				<div  class="field">
+					<%= _("First name") %>:<br/>
+					<%= f.text_field :f_name, :size => 40, :class => "biginput" %>
+				</div>
+
+				<div  class="field">
+					<%= _("Last name") %>:<br/>
+					<%= f.text_field :l_name, :size => 40, :class => "biginput", :autocomplete => "off" %>
+				</div>
+
+			</div>
+			<div style="float:left">
+				<% if session[:role] == "admin" %>
+					<div  class="field">
+						<abbr title="<%= _("Type of user")%>"><%= _("ROLE") %></abbr>:<br/>
+						<%= f.collection_select("rol", @types, :first, :last) %>
+					</div>
+				<div  class="field">
+					<%= f.check_box :active %> <%= _("Active") %>
+
+				</div>
+                                <% else %>
+                                <%= hidden_field "rol","user" %>
+				<% end %>
+			</div>
+		</div>
+
+		<h3><%= _("Password") %></h3>
+		<p><%= _("If you leave it blank, the password will not be changed.") %></p>
+		<div  class="field">
+			<%= _("Password") %>:<span class="mandatory">*</span>:<br/>
+			<%= f.password_field :password, :size => 40 %>
+		</div>
+
+		<div  class="field">
+			<%= _("Confirm password") %>:<span class="mandatory">*</span>:<br/>
+			<%= f.password_field :password_confirmation, :size => 40 %>
+		</div>
+
+                <div  class="actions">
+			<%= f.submit %>
+		</div>               
+
+	<% end %>
+
+</div>

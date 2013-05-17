@@ -1,0 +1,15 @@
+
+<h2><%=  _('Emails list') %></h2>
+
+<table class="email_account_table">
+  <tbody>
+    <%# raise @account_remote_server.list_email_account.to_yaml %>
+    <% @account_remote_server.get_email_accounts.each do |email| %>
+        <tr>
+          <td><%=  email %></td>
+          <td><%= link_to image_tag("edit.png",:title=>_('Edit'),:alt=>_('Edit')), {:action => :edit_email_account, :user => email}%></td>
+        </tr>
+    <%end%>
+  </tbody>
+</table>
+<br/>

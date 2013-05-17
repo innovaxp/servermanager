@@ -1,0 +1,47 @@
+<h1><%= _("Listing backups of ") %><%= @backup_configuration ? @database : ''%>  </h1>
+
+
+<%= form_tag( {:action => 'restore_backup'}, :id => 'restore_bkp' ) do %>
+  <%= hidden_field_tag('backup_configuration_id',@backup_configuration.id) %>
+  <%= hidden_field_tag('database', @database) %>
+  <% @backups.each do |backup| %>
+    <ul style="list-style: none;padding-left:0">
+      <li>
+        <%= radio_button_tag('backup', backup.id, (backup == @backups.first))%> <%= l backup.created_at, :format => :custom %> -- <em style="font-size:12px"> (<%= time_ago_in_words(backup.created_at) %>) <%= raw (backup == @backups.first) ? ' -- '+_('Most recent') : '' %></em>
+      </li>
+    </ul>
+  <% end %><br/>
+  <%= check_box_tag "sure", "yes", false, :id => "sure" %> <%= _("I know what I'm doing and I'm sure I want to restore this database") %><br/><br/>
+  
+  <%= submit_tag _('Restore to selected backup'), :id => 'submit', :style => 'display:none'  %> <br/>
+  <br />
+<%end%>
+
+<%= link_to _('Back'), {:action =>'index',:controller => 'backups', :backup_configuration_id => @backup_configuration.id}, :class => 'back mini-icon' %>
+
+<script type="text/javascript">
+
+jQuery(document).ready(function(){
+	jQuery('#restore_bkp').submit(function(){
+		if(confirm('<%= _("You are going to restore a database, so the actual database will be COMPLETELY ERASED. This process is VERY RISKY, you can loose data.") %>'+'\n'+'\n'+ '<%= _("Are you sure you want to restore the selected database to the specified date?") %>')){
+			return true;
+		}
+		return false;
+	});
+	
+	jQuery('#sure').click(function(){
+		if( jQuery(this).is(":checked") ){
+			jQuery('#submit').show();
+		}
+		else{
+			jQuery('#submit').hide();
+		}
+	})
+	
+});
+
+</script>
+
+<%#= link_to _('New Backup'), new_backup_path ,:class => 'new mini-icon' %>
+
+

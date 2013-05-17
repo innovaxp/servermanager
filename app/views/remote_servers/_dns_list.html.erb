@@ -1,0 +1,16 @@
+<h2><%=  _('DNS list') %></h2>
+
+<table class="email_account_table">
+  <tbody>
+    <% @remote_server.list_dnss.each do |dns| %>
+      <tr>
+        <td><%= dns['source'] %></td>
+        <td><%= dns['type'] %></td>
+        <td><%= dns['destination'] %></td>
+        <td><%= link_to image_tag("edit.png",:title=>_('Edit'),:alt=>_('Edit')), {:action => :edit_dns, :source => dns['source'] , :type => dns['type'], :destination => dns['destination']}%></td>
+        <td><%= link_to image_tag("destroy.png",:title=>_('Delete'),:alt=>_('Delete')), {:action => :delete_dns}%></td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
+<br/>

@@ -1,0 +1,48 @@
+<table class="accounts_manage index-table crons_table">
+
+  <thead>
+
+    <th class="th_date"><%= _('Min')%></th>
+    <th class="th_date"><%= _('H')%></th>
+    <th class="th_date"><%= _('D')%></th>
+    <th class="th_date"><%= _('Mon')%></th>
+    <th class="th_date"><%= _('W')%></th>
+    <th><%= _('Command')%></th>
+    <th><%= _('Active')%></th>
+    <th><%= _('Action')%></th>
+
+  </thead>
+  <tbody>
+
+      <%#= raise  @account_remote_server.to_yaml%>
+      <% @account_remote_server.get_crons.each do |email| %>
+
+        <tr>
+          <%email['date_fields'].each do |date|%>
+
+              <td><%=  date.to_s %></td>
+
+          <%end%>
+          <td><%=  email['command_field'].to_s%></td>
+          <% if email['active']
+            act_image = "active.png"
+            alt_txt = _("Active")
+            status = 'enable'
+          else
+            act_image = "inactive.png"
+            alt_txt = _("Inactive")
+            status = 'disable'
+          end
+          %>
+          <%if email['line_n']
+            line_n = email['line_n']
+          end
+          %>
+          <td><%= link_to image_tag(act_image, :alt => alt_txt, :title => alt_txt, :class => "mini-image") ,{:action => 'toggle_cron_activation', :account_remote_servers_id => @account_remote_server.root_remote_server_id.to_s, :status => status.to_s, :line_n => line_n.to_s}%></td>
+          <!--{:action => :delete_cron, :account_remote_servers_id => @account_remote_server.id}-->
+          <td><%= link_to image_tag("destroy.png", :title => _("Delete"), :alt => _("Delete")), {:action => 'delete_cron', :remote_server_id => @account_remote_server.root_remote_server_id.to_s, :line_n => line_n.to_s}, :confirm => _('Are you sure?') %></td>
+
+        </tr>
+    <%end%>
+  </tbody>
+</table>

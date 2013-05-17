@@ -1,0 +1,8 @@
+<h1><%=  _('Email forwarders') %></h1>
+
+
+<%= render :partial => 'email_forward_form' %>
+
+<%= render :partial => 'email_configured_forward' %>
+<br/>
+<%= link_to _('Back'), remote_servers_path+'?open_account='+@account_remote_server.root_remote_server_id.to_s, :class => "back mini-icon" %>

@@ -1,0 +1,5 @@
+
+<%= render :partial => 'email_account_list' %>
+
+<%= link_to _('Back'), remote_servers_path+'?open_account='+@account_remote_server.root_remote_server_id.to_s, :class => "back mini-icon" %>
+<span style="margin-left: 75px;"><%= link_to _('New Email Account'), {:action => 'new_email_account'}, :class => "new mini-icon" %></span>

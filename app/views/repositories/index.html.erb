@@ -1,0 +1,52 @@
+<h1><%= _('Listing repositories') %></h1>
+
+<table class="index-table">
+	<thead>
+		<tr>
+			<th><%= _('Description') %></th>
+			<th><abbr title="<%= _('Current Revision') %>">R</abbr></th>
+			<th><%= _('Last Sync') %></th>
+			<th><%= _('SVN Actions') %></th>
+			<th><abbr title="<%= _('Working copies') %>">WC</abbr></th>
+			<th><%= _('Actions') %></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @repositories.each do |repository| %>
+		  <tr>
+			<td style="text-align: center"><abbr title="<%= repository.master_location %>"><%= repository.description %></abbr></td>
+			<td style="text-align: center"><%= repository.current_version ? repository.current_version : 0 %></td>
+			<td style="text-align: center"><%= repository.last_sync_date ? repository.last_sync_date.strftime("%d-%m-%Y %H:%M:%S") : _('Unknown') %></td>
+			<td style="text-align: center">
+				<%# link_to '', repository, :title => _('Explore Files'), :class => 'explore mini-icon' %>&nbsp;&nbsp;
+				<%= link_to '', {:action => 'show_log', :id => repository.id }, :title => _('View Log'), :class => 'log mini-icon long_task' %>&nbsp;&nbsp;
+				<%= link_to '', {:action => 'sync', :id => repository.id}, :title => _('Sync'), :class => 'sync mini-icon long_task' %>
+			</td>
+			<td style="text-align: center">
+                                <%=repository.working_copies.count%>&nbsp;
+				<%= link_to '', {:controller => 'working_copies', :action => 'index', :repository_id => repository.id}, :title => _('Working copies'), :class => 'working_copy mini-icon' %>
+			</td>
+			<td style="text-align: center"><%= link_to '', repository, :title => _('Show'), :class => 'show mini-icon' %>&nbsp;&nbsp;
+				<%= link_to '', edit_repository_path(repository), :title => _('Edit'), :class => 'edit mini-icon' %>&nbsp;&nbsp;
+				<%= link_to '', repository, confirm: _('Are you sure?'), method: :delete, :title => _('Destroy'), :class => 'destroy mini-icon' %>
+			</td>
+		  </tr>
+		<% end %>
+	</tbody>
+</table>
+
+<br />
+
+<%= link_to _('New repository'), new_repository_path, :class => 'new mini-icon' %>
+
+
+<script type="text/javascript">
+	jQuery('.long_task').click(function(){
+		jQuery('#loading').show();
+	});
+
+	jQuery(document).ready(function(){
+		jQuery('#loading').hide();
+	});
+
+</script>

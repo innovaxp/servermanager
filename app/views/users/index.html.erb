@@ -1,0 +1,62 @@
+<h1><%= _("Listing users") %> </h1>
+
+<table class="index-table">
+  <thead>
+  <tr>      
+    <th><%= _("Name") %></th>
+    <th><%= _("Email") %> </th>
+    <th><%= _("First name") %></th>
+    <th><%= _("Last name") %></th>
+    <th><%= _("Role") %></th>
+    <th><%= _("Active") %></th>
+   <th class="blank"></th>
+  </tr>
+</thead>
+<tbody>
+<% @users.each do |user| %>
+  <tr id="<%=user.id%>">
+    <td><%= user.name %></td>
+    <td><%= user.email %></td>        
+    <td><%= user.f_name %></td>
+    <td><%= user.l_name %></td>
+    <td><%= user.rol %></td>
+        <% if user.active?
+            act_image = "active.png"
+            alt_txt = _("Active")
+    else
+    act_image = "inactive.png"
+    alt_txt = _("Inactive")
+    end
+    %>
+
+<td class="cent-cell"><%= link_to image_tag(act_image, :alt => alt_txt, :title => alt_txt, :class => "mini-image"), {:controller => "users", :action => "change_active", :id => user.id}, :remote => true, :class => "toggle-active"%></td>
+
+     <td><%= link_to image_tag("show.png", :border=>0, :title => _("Show"), :alt => _("Show")), user %>
+    <%= link_to image_tag("edit.png", :border=>0, :title => _("Edit"), :alt => _("Edit")), edit_user_path(user) %>
+    <%= link_to image_tag("destroy.png", :border=>0, :title => _("Destroy"), :alt => _("Destroy")),  {:controller => "users", :action => "destroy", :id => user.id }, :confirm => 'Are you sure?', :method => :delete %></td>
+
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<%= link_to 'New User', new_user_path, :class => 'button1' %>
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+  jQuery('.toggle-active').bind('ajax:complete', function(evt, xhr, status){
+      //var responseObject = jQuery.parseJSON(xhr.responseText);
+      dataJ = eval( '(' + xhr.responseText + ')')     
+      if(dataJ.act_user == 0 || dataJ.act_user == false || dataJ.act_user == 'false'){
+        
+         jQuery("#"+dataJ.usr_id + " img.mini-image:first").attr("src", "/assets/inactive.png");
+      }else{
+        
+         jQuery("#"+dataJ.usr_id + " img.mini-image:first").attr("src", "/assets/active.png");
+
+      }
+  })
+  });
+</script>

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  description: MyString
+  master_location: MyString
+  slave_location: MyString
+  current_version: 1
+  user: MyString
+  password: MyString
+
+two:
+  description: MyString
+  master_location: MyString
+  slave_location: MyString
+  current_version: 1
+  user: MyString
+  password: MyString

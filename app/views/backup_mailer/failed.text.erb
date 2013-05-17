@@ -1,0 +1,8 @@
+<%= _('Cheers from Innova Server Manager')  %>
+===============================================
+
+<%= sprintf(_('Your Backup for server %s with ID %d has failed, you could retry it now or wait until the next period'), @backup_configuration.remote_server.description.to_s, @backup.id) %>
+
+<%= sprintf(_('To retry the upload or check more details, click here: %s'), url_for(:controller => 'backups', :action => 'index', :backup_configuration_id => @backup_configuration.id, :only_path => false) ) %>
+
+<%= _('Thanks for using Innova Server Manager') %>

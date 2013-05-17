@@ -1,0 +1,11 @@
+A new cron has been created on <%= @remote_server.host %>.
+
+The planning is: 
+    <%= @options['minute'] %> <%= @options['hour'] %> <%= @options['minute'] %>
+    Command: <%= @options['command'] %>
+
+<% if @options['active'] && @options['active'] == '1' %>
+This cron is active.
+<% else %>
+This cron is not active.
+<% end %>

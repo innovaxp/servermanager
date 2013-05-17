@@ -1,0 +1,13 @@
+<%= _('Cheers from Innova Server Manager')  %>
+===============================================
+
+<%= sprintf(_('Your Backup for server %s with ID %d has finished successfully!'), @backup_configuration.remote_server.description.to_s, @backup.id) %>
+
+<% if @backup.meta && @backup.meta['url'] && @backup.meta['url'].size() > 0 %>
+<%= _('The backup links are:') %>
+<% @backup.meta['url'].each do |key, url| %>
+	<%= "* "+key+": "+url %>
+<%end%>
+<%end%>
+
+<%= _('Thanks for using Innova Server Manager') %>

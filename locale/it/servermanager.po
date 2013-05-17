@@ -1,0 +1,513 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: version 0.0.1\n"
+"POT-Creation-Date: 2012-06-27 10:02+0200\n"
+"PO-Revision-Date: 2012-06-27 10:08+0100\n"
+"Last-Translator: Rubén Trujillo <rubentrf@gmail.com>\n"
+"Language-Team: Innova Experience <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+msgid "Action that appear in red must be performed, green ones not. Grey reflects undefined or unknown status."
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "Added"
+msgstr ""
+
+msgid "All tasks"
+msgstr ""
+
+msgid "All tasks performed successfully"
+msgstr ""
+
+msgid "Are you sure?"
+msgstr ""
+
+msgid "Are you sure? This action cannot be undone"
+msgstr ""
+
+msgid "Assets precompiled successfull"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Back to repositories"
+msgstr ""
+
+msgid "Back to top"
+msgstr ""
+
+msgid "Bundle install"
+msgstr ""
+
+msgid "Case insensitive"
+msgstr ""
+
+msgid "Changed files"
+msgstr ""
+
+msgid "Check Status"
+msgstr ""
+
+msgid "Checkout"
+msgstr ""
+
+msgid "Checkout was successfull"
+msgstr ""
+
+msgid "Commits info"
+msgstr ""
+
+msgid "Compiling assets"
+msgstr ""
+
+msgid "Confirm password"
+msgstr ""
+
+msgid "Credentials"
+msgstr ""
+
+msgid "Current Revision"
+msgstr ""
+
+msgid "DB Migrations"
+msgstr ""
+
+msgid "Database migrated successfull"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Deleted"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Destroy"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Edit Profile"
+msgstr ""
+
+msgid "Editing Remote Server"
+msgstr ""
+
+msgid "Editing repository"
+msgstr ""
+
+msgid "Editing user"
+msgstr ""
+
+msgid "Editing working copy"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Email:"
+msgstr ""
+
+msgid "Enter your email and password to access"
+msgstr ""
+
+msgid "First name"
+msgstr ""
+
+msgid "Folder"
+msgstr ""
+
+msgid "Gems installed successfully"
+msgstr ""
+
+msgid "Host"
+msgstr ""
+
+msgid "If you leave it blank, the password will not be changed."
+msgstr ""
+
+msgid "Inactive"
+msgstr ""
+
+msgid "Invalid user/password combination"
+msgstr ""
+
+msgid "Last Sync"
+msgstr ""
+
+msgid "Last name"
+msgstr ""
+
+msgid "Last update date"
+msgstr ""
+
+msgid "List of SVN repositories"
+msgstr ""
+
+msgid "Listing Remote Servers"
+msgstr ""
+
+msgid "Listing repositories"
+msgstr ""
+
+msgid "Listing users"
+msgstr ""
+
+msgid "Listing working copies for %s"
+msgstr ""
+
+msgid "Loading"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Log In"
+msgstr ""
+
+msgid "Logged out"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "Main info"
+msgstr ""
+
+msgid "Matches in %d files"
+msgstr ""
+
+msgid "Member Since"
+msgstr ""
+
+msgid "Merged"
+msgstr ""
+
+msgid "Migrating database"
+msgstr ""
+
+msgid "Modified"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "New remote server"
+msgstr ""
+
+msgid "New repository"
+msgstr ""
+
+msgid "New user"
+msgstr ""
+
+msgid "New working copy"
+msgstr ""
+
+msgid "No log info"
+msgstr ""
+
+msgid "No matches found"
+msgstr ""
+
+msgid "Note"
+msgstr ""
+
+msgid "On local server"
+msgstr ""
+
+msgid "On remote server"
+msgstr ""
+
+msgid "PHP Actions"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Path"
+msgstr ""
+
+msgid "Precompile assets"
+msgstr ""
+
+msgid "ROLE"
+msgstr ""
+
+msgid "Rails Actions"
+msgstr ""
+
+msgid "Remote server"
+msgstr ""
+
+msgid "Remote server data"
+msgstr ""
+
+msgid "Remote servers"
+msgstr ""
+
+msgid "RemoteServer|Description"
+msgstr ""
+
+msgid "RemoteServer|Host"
+msgstr ""
+
+msgid "RemoteServer|Password"
+msgstr ""
+
+msgid "RemoteServer|Path"
+msgstr ""
+
+msgid "RemoteServer|User"
+msgstr ""
+
+msgid "Repository"
+msgstr ""
+
+msgid "Repository URL"
+msgstr ""
+
+msgid "Repository UUID"
+msgstr ""
+
+msgid "Repository full log"
+msgstr ""
+
+msgid "Repository sub-folder"
+msgstr ""
+
+msgid "Repository type"
+msgstr ""
+
+msgid "Repository|Current version"
+msgstr ""
+
+msgid "Repository|Description"
+msgstr ""
+
+msgid "Repository|Last sync date"
+msgstr ""
+
+msgid "Repository|Master location"
+msgstr ""
+
+msgid "Repository|Password"
+msgstr ""
+
+msgid "Repository|Slave location"
+msgstr ""
+
+msgid "Repository|User"
+msgstr ""
+
+msgid "Restarting server"
+msgstr ""
+
+msgid "Revision"
+msgstr ""
+
+msgid "Revisions list"
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
+msgid "Rollback"
+msgstr ""
+
+msgid "Rollback was successfull"
+msgstr ""
+
+msgid "Running bundle"
+msgstr ""
+
+msgid "SVN Actions"
+msgstr ""
+
+msgid "SVN Mirror Manager"
+msgstr ""
+
+msgid "SVN Repository Manager"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Search extensions (comma separated)"
+msgstr ""
+
+msgid "Search on files"
+msgstr ""
+
+msgid "Search recursively"
+msgstr ""
+
+msgid "Search term"
+msgstr ""
+
+msgid "Select a remote server..."
+msgstr ""
+
+msgid "Server Manager"
+msgstr ""
+
+msgid "Server Restart"
+msgstr ""
+
+msgid "Server restarted successfull"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Show details"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Status checked"
+msgstr ""
+
+msgid "Sync"
+msgstr ""
+
+msgid "This is the subfolder, inside /var/svn/, where the server files will live"
+msgstr ""
+
+msgid "Type of user"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "Update to revision"
+msgstr ""
+
+msgid "Update to specific revision"
+msgstr ""
+
+msgid "Update was successfull"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "User data"
+msgstr ""
+
+msgid "User name"
+msgstr ""
+
+msgid "User permissions required"
+msgstr ""
+
+msgid "User|Active"
+msgstr ""
+
+msgid "User|Email"
+msgstr ""
+
+msgid "User|F name"
+msgstr ""
+
+msgid "User|Hashed password"
+msgstr ""
+
+msgid "User|L name"
+msgstr ""
+
+msgid "User|Name"
+msgstr ""
+
+msgid "User|Rol"
+msgstr ""
+
+msgid "User|Salt"
+msgstr ""
+
+msgid "View Log"
+msgstr ""
+
+msgid "Welcome to %s"
+msgstr ""
+
+msgid "Working copies"
+msgstr ""
+
+msgid "Working copy sub-folder"
+msgstr ""
+
+msgid "WorkingCopy|Current revision"
+msgstr ""
+
+msgid "WorkingCopy|Flags"
+msgstr ""
+
+msgid "WorkingCopy|Last revision"
+msgstr ""
+
+msgid "WorkingCopy|Last update date"
+msgstr ""
+
+msgid "WorkingCopy|Location"
+msgstr ""
+
+msgid "WorkingCopy|Password"
+msgstr ""
+
+msgid "WorkingCopy|Status"
+msgstr ""
+
+msgid "WorkingCopy|User"
+msgstr ""
+
+msgid "WorkingCopy|Wc location"
+msgstr ""
+
+msgid "by %s on %s"
+msgstr ""
+
+msgid "fields with the <span class='mandatory'>red asterisk</span> are mandatory."
+msgstr ""
+
+msgid "remote server"
+msgstr ""
+
+msgid "repository"
+msgstr ""
+
+msgid "user"
+msgstr ""
+
+msgid "working copy"
+msgstr ""
+

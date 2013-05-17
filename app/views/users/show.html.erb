@@ -1,0 +1,28 @@
+<h1><%= _("User") %></h1>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b><%= _("Email") %>:</b>
+  <%= @user.email %>
+</p>
+
+<p>
+  <b><%= _("First name") %>:</b>
+  <%= @user.f_name %>
+</p>
+
+<p>
+  <b><%= _("Last name") %>:</b>
+  <%= @user.l_name %>
+</p>
+
+<p>
+  <b><%= _("Member Since") %>:</b>
+  <%= @user.created_at.strftime("%d-%m-%Y") %>
+</p>
+<br/>
+<%= link_to _('Edit Profile'), edit_user_path(@user), :class => 'button1' %>
+
+
+

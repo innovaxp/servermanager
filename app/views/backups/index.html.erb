@@ -1,0 +1,88 @@
+<h1><%= _("Listing backups of ") %><%= @backup_configuration ? @backup_configuration.remote_server.description.to_s : ''%>  </h1>
+
+<% if  @backup_configuration.databases %>
+  <%=form_tag(:action => 'list_historical_backup') do%>
+  <div style="float:left;padding-right:20px">  <%= select_tag('database',options_for_select(@backup_configuration.databases),{:prompt => _('Select to show just one DB')})%> </div>
+    <%= hidden_field_tag('backup_configuration_id',@backup_configuration.id) %>
+  <%= submit_tag _('List Historical backup'),{:class =>'submit', :disabled => 'disabled'}  %> <br/>
+  <%end%>
+<%end%>
+
+<% if notice && notice != '' %>
+	<p class="notice"><%= notice %>.</p>
+<% end %>
+
+<p><%= link_to _('Back'), request.referer, :class => 'back mini-icon' %></p>
+
+<table class="index-table">
+  <thead>
+  <tr>
+    <th><%= _("Created at") %></th>
+    <th><%= _("Status") %></th>
+    <th><%= _("Information") %></th>
+    <th><%= _("Actions") %></th>
+  </tr>
+  </thead>
+  <tbody>
+<% @backups.each do |backup| %>
+  <tr>
+    <td><%= l backup.created_at, :format => :custom %></td>
+    <td class="backup-<%= backup.status %>"><%= backup.status.titleize %></td>
+    <td><% if backup.meta && backup.meta.size > 0 %>
+		<ul>
+        <% backup.meta.each do |key,value| %>
+		<li><%= key.titleize.to_s+":" %>
+			<% if value.kind_of?(Hash) %>
+			<ul>
+				<% value.each do |key2, value2| %>
+				<li><%= key2.to_s+": " %>
+					<% if /https?:/.match(value2) %>
+					<%= link_to _('Download'), value2.to_s, :title => value2.to_s %>
+					<% else %>
+					<%= value2 %>
+					<% end %>
+				</li>
+				<% end%>
+			</ul>
+			<% else %>
+				<%= value.to_s %>
+			<% end%>
+		</li>
+		<% end %>
+	    </ul>
+    <% end %>
+    </td>
+    <td style="text-align: center; min-width:150px">
+		<% if backup.status == 'failed' || backup.status == 'finished_with_errors' %>
+		<%= link_to (image_tag "serv_restart.png",:title=>_('Retry Backup'),:alt=>_('Retry Backup'))+" "+_('Retry Backup'),  {:action =>'retry_backup', :id => backup.id} %><br/>
+                <%#= (image_tag "retr_upload.png",:title=>_('Retry Upload'),:alt=>_('Retry Upload'))+" "+_('Retry Upload') %><br/>
+		<% else %>
+                <%#= (image_tag "retr_upload.png",:title=>_('Retry Upload'),:alt=>_('Retry Upload'))+" "+_('Retry Upload') %><br/>
+                <%#= (image_tag "serv_restart.png",:title=>_('Retry Backup'),:alt=>_('Retry Backup'))+" "+_('Retry Backup') %>
+
+                <%end%>
+    </td>
+    
+  </tr>
+<% end %>
+  </tbody>
+</table>
+
+<br />
+
+<%= link_to _('Back'), request.referer, :class => 'back mini-icon' %>
+
+<%#= link_to _('New Backup'), new_backup_path ,:class => 'new mini-icon' %>
+
+<script type="text/javascript">
+
+  jQuery('#database').live('change',function(){
+    if(jQuery('#database option:selected').val() == '' ){      
+      jQuery('.submit').attr('disabled','disabled');
+    }else{      
+      jQuery('.submit').removeAttr('disabled');
+    }
+  })
+
+</script>
+

@@ -14,3 +14,9 @@ capybara-*.html
 **.orig
 rerun.txt
 pickle-email-*.html
+/config/database.yml
+/config/config.yml
+/nbproject/*
+Gemfile.lock
+.svn
+.DS_Store

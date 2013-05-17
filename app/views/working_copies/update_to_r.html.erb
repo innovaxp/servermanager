@@ -1,0 +1,31 @@
+<h1><%= _('Update to revision') %></h1>
+
+<h3>
+	<%= _("Revisions list") %>
+</h3>
+
+<%= form_tag :controller => "working_copies", :action => "rollback_wc" do %>
+
+<% @log_info.each do |value| %>
+	<div style="overflow: auto;min-height: 35px">
+	<div style="float:left"><%= radio_button_tag :revision, value['revision'].to_i %>&nbsp;</div>
+	<div style="float:left"><h4 style="clear:none;display:inline">Rev. <%= value['revision'] %> - <%= value['msg'] && value['msg'].class == String ? value['msg'].to_s : '' %></h4>
+			<span class="svn-descr"><%= sprintf(_('by %s on %s'), value['author'], DateTime.parse(value['date']).strftime("%d-%m-%Y %H:%M:%S")) %></span></div>
+	</div>
+	
+
+<% end %>
+<%= hidden_field_tag :id => @working_copy.id %>
+<%= submit_tag _("Update"), :class => 'long_task' %>
+<% end %>
+
+<script type="text/javascript">
+	jQuery('.long_task').click(function(){
+		jQuery('#loading').show();
+	});
+
+	jQuery(document).ready(function(){
+		jQuery('#loading').hide();
+	});
+
+</script>

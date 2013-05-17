@@ -1,0 +1,57 @@
+ <% if flash[:error] %>
+  <div class="error"><%= flash[:error] %></div>
+<% end %>
+
+<%
+if params[:action] == "new_dns" || params[:action] == 'create_dns'
+  the_action = "create_dns"
+else
+  the_action = "update_dns"
+end
+%>
+
+<%= form_tag(the_action, {:autocomplete => 'off'}) do %>
+
+  <div class="field">
+    <%= _('Source') %>:<br />
+
+    <%= text_field_tag 'source', params[:source] ? params[:source] : '', :required => (params[:action] == "new_dns") %>
+
+    <% if params[:action] == "edit_dns"%>
+
+      <%= hidden_field_tag 'old_source', params[:source]%>
+
+    <%end%>
+  </div>
+
+  <div class="field">
+    <%= _('Type') %>:<br />
+
+    <%= select_tag 'type', options_from_collection_for_select(@tipo_dns, :first, :last, :type) %>
+
+    <% if params[:action] == "edit_dns"%>
+
+      <%= hidden_field_tag 'old_type', params[:type]%>
+
+    <%end%>
+  </div>
+
+  <div class="field">
+    <%= _('Destination') %>:<br />
+
+    <%= text_field_tag 'destination', params[:destination] ? params[:destination] : '', :required => (params[:action] == "new_dns") %>
+
+    <% if params[:action] == "edit_dns"%>
+
+      <%= hidden_field_tag 'old_destination', params[:destination]%>
+
+    <%end%>
+  </div>
+  <br/>
+  <div class="actions">
+
+    <%= submit_tag('Save')%>
+    
+  </div>
+  <br/>
+<%end%>
